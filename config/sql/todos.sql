@@ -1,0 +1,24 @@
+CREATE TABLE Todos (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(20) DEFAULT 'Un-titled',
+    Type VARCHAR(10) DEFAULT 'Standard',
+    Text VARCHAR(255) DEFAULT '',
+    Status INT NOT NULL DEFAULT 0,
+    LAST_UPDATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT CHK_Status CHECK (Status=0 OR Status=1)
+);
+
+
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+INSERT INTO Todos (Name, Text) VALUES('AA', 'BB');
+GO
+
+SELECT * FROM Todos;
