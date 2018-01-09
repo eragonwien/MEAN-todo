@@ -1,3 +1,4 @@
+var dotenv = require('dotenv').config();
 var mysql = require('mysql');
 var db = require('../config/database');
 
