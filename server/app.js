@@ -7,11 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var passport = require('passport');
-var flash = require('connect-flash');
 var session = require('express-session');
 
-
-var index = require('./routes/index');
+var index = require('./routes/index')(passport);
 var users = require('./routes/users');
 
 var app = express();
@@ -21,15 +19,20 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // passport
-//require('./config/passport')(passport);
+require('./config/passport')(passport);
+
 app.use(session({
   secret: 'milleniumbalkon',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    expires: new Date(Date.now() + 60 * 60 * 1000) // 1 hours in miliseconds
+  }
 }));
+
+
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -65,6 +68,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
+// add variables to request
+app.use(function (req, res, next) {
+  req.passport = passport;
+  req.session = session;
+  next();
+});
 
 module.exports = app;
