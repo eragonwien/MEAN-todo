@@ -8,4 +8,4 @@ var config = {
     DB_NUM_OF_FAKE_DATA: 100
 }
 
-exports.module = config;
+module.exports = config;
