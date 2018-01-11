@@ -1,15 +1,13 @@
-var model = require('../models/todos');
+var user = require('../models/user');
+var debug = require('debug')('index_ctrl');
 /* Homepage */
 exports.showHome = function(req, res, next){
-    res.render('index', {
-        'title': 'Todo-app',
-        'mode': (process.env.NODE_ENV) ? process.env.NODE_ENV : 'none'
-    });
+    res.redirect('/profile');
 }
 /* Login */
 exports.showLogin = function (req, res, next) {
     res.render('login.ejs', {
-        'message': req.flash('loginMessage')
+        message: req.params.message
     });
 }
 
@@ -17,25 +15,31 @@ exports.UserLogin = function (req, res, next) {
     res.redirect('/login');
 }
 
-exports.checkUserAuthentication = function (req, res, next) {
+exports.IsUserLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
         return;
     }
-    var err = new Error('Access denied');
-    err.status = 401;
-    next(err);
+    res.redirect('/login');
+    
 }
 
 /* Sign up */
 exports.showSignup = function (req, res, next) {
     res.render('signup.ejs', {
-        'message': req.flash('signupMessage')
+        'message': 'sign up now !'
     });
 }
 
 exports.createNewUser = function (req, res, next) {
-    res.redirect('/signup');
+    user.CreateNewUser(req.body, function(error, result){
+        if (error) {
+            return next(error);
+        }
+        res.render('login', {
+            message: 'User created successfully.'
+        });
+    });
 }
 /* Profile */
 exports.showProfile = function (req, res, next) {
@@ -46,8 +50,8 @@ exports.showProfile = function (req, res, next) {
 
 /* Log out */
 exports.logout = function (req, res, next) {
-    res.logout();
-    res.render('index', {
-        'message': 'logged out'
+    req.logout();
+    req.session.destroy(function (error) {
+        res.redirect('/');
     });
 }
