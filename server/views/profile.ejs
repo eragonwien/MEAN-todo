@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Profile</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Profile</h1>
+      <p><%- JSON.stringify(user) %></p>
+      <p><%= user[0].Firstname %> <%= user[0].Lastname %></p>
+      <a href="/logout">Logout</a>
+    </div>
+  </body>
+</html>
