@@ -4,22 +4,22 @@ CREATE TABLE IF NOT EXISTS User(
     Uid INT AUTO_INCREMENT,
     Email VARCHAR(50) NOT NULL UNIQUE,
     Password CHAR(76) NOT NULL,    
-    Role VARCHAR(255) NOT NULL,
-    Firstname VARCHAR(255),
-    Lastname VARCHAR(255),
-    Last_Update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    Role VARCHAR(255) NOT NULL DEFAULT 'Standard',
+    Firstname VARCHAR(255) NOT NULL,
+    Lastname VARCHAR(255) NOT NULL,
+    Last_Update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (Uid),
     CONSTRAINT CHK_Role CHECK (Role IN('Admin', 'Standard'))
 );
 
 CREATE TABLE IF NOT EXISTS Project (
-    Pid INT AUTO_INCREMENT,
-    Uid INT,
-    Name VARCHAR(30) DEFAULT 'Un-titled',
-    Target VARCHAR(255),
-    Progress INT DEFAULT 0,
+    Pid INT NOT NULL AUTO_INCREMENT,
+    Uid INT NOT NULL,
+    Name VARCHAR(30) NOT NULL DEFAULT 'Un-titled',
+    Target VARCHAR(255) NOT NULL,
+    Progress INT NOT NULL DEFAULT 0,
     Status VARCHAR(50) NOT NULL DEFAULT 'Incomplete',
-    Last_Update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    Last_Update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (Pid),
     FOREIGN KEY (Uid) REFERENCES User(Uid),
     CONSTRAINT CHK_Progress CHECK (Progress BETWEEN 0 and 100),
@@ -27,11 +27,11 @@ CREATE TABLE IF NOT EXISTS Project (
 );
 
 CREATE TABLE IF NOT EXISTS Todo (
-    Tid INT AUTO_INCREMENT,
-    Pid INT,
-    Text VARCHAR(255),
+    Tid INT NOT NULL AUTO_INCREMENT,
+    Pid INT NOT NULL,
+    Text VARCHAR(255) NOT NULL,
     Status VARCHAR(50) NOT NULL DEFAULT 'Incomplete',
-    Last_Update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    Last_Update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (Tid),
     FOREIGN KEY (Pid) REFERENCES Project(Pid),
     CONSTRAINT CHK_Status CHECK (Status IN('Incomplete', 'Complete'))        
@@ -40,11 +40,11 @@ CREATE TABLE IF NOT EXISTS Todo (
 
 
 INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange@marvel.com', '1234', 'Admin', 'Stephen', 'Strange');
-GO
+
 
 INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange first act.', 'Reaching the sacred temple');
 INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange second act.', 'Becoming a sorcerer');
-GO
+
 
 INSERT INTO Todo (Pid, Text) VALUES(1, 'Being a good doctor');
 INSERT INTO Todo (Pid, Text) VALUES(1, 'Getting into a car accident');
