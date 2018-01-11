@@ -3,24 +3,33 @@
 var express = require('express');
 var router = express.Router();
 
-var controller = require('../controllers/index')
+var indexctrl = require('../controllers/index');
+
 /* Un-protected routes */
 /* Home */
-router.get('/', controller.showHome);
+router.get('/', indexctrl.showHome);
 
 /* Login */
-router.get('/login', controller.showLogin);
-router.post('/login', controller.UserLogin);
+router.get('/login', indexctrl.showLogin);
+
 
 /* Sign up */
-router.get('/signup', controller.showSignup);
-router.post('/signup', controller.createNewUser);
+router.get('/signup', indexctrl.showSignup);
+router.post('/signup', indexctrl.createNewUser);
+
 
 /* Log out */
-router.get('/logout', controller.logout);
+router.get('/logout', indexctrl.logout);
 
 /* Protected routes */
 /* Profile */
-router.get('/profile', controller.checkUserAuthentication, controller.showProfile);
+router.get('/profile', indexctrl.IsUserLoggedIn, indexctrl.showProfile);
 
-module.exports = router;
+module.exports = function(passport){
+    router.post('/login', passport.authenticate('local-login', {
+        successRedirect: '/profile',
+        failureRedirect: '/login'
+    }));
+    
+    return router;
+};
