@@ -40,10 +40,13 @@ CREATE TABLE IF NOT EXISTS Todo (
 
 
 INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange@marvel.com', '1234', 'Admin', 'Stephen', 'Strange');
+INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange2@marvel.com', '1234', 'Standard', 'Stephen', 'Strange');
 
 
 INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange first act.', 'Reaching the sacred temple');
 INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange second act.', 'Becoming a sorcerer');
+INSERT INTO Project (Uid, Name, Target) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer');
+INSERT INTO Project (Uid, Name, Target) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer');
 
 
 INSERT INTO Todo (Pid, Text) VALUES(1, 'Being a good doctor');
@@ -56,6 +59,15 @@ INSERT INTO Todo (Pid, Text) VALUES(2, 'Learning to teleport');
 INSERT INTO Todo (Pid, Text) VALUES(2, 'Reading books');
 INSERT INTO Todo (Pid, Text) VALUES(2, 'Mastering the sacred weapons');
 
+INSERT INTO Todo (Pid, Text) VALUES(3, '2 Being a good doctor');
+INSERT INTO Todo (Pid, Text) VALUES(3, '2 Getting into a car accident');
+INSERT INTO Todo (Pid, Text) VALUES(3, '2 Finding people who can fix broken hands');
+INSERT INTO Todo (Pid, Text) VALUES(3, '2 Find the sacred temple');
+
+INSERT INTO Todo (Pid, Text) VALUES(4, '2 Talking with the elder');
+INSERT INTO Todo (Pid, Text) VALUES(4, '2 Learning to teleport');
+INSERT INTO Todo (Pid, Text) VALUES(4, '2 Reading books');
+INSERT INTO Todo (Pid, Text) VALUES(4, '2 Mastering the sacred weapons');
 
 SELECT Todo.Tid, User.email, Project.Name, Todo.Text, Todo.Status
 FROM Todo

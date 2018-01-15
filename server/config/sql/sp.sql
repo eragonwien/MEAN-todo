@@ -25,6 +25,16 @@ DELIMITER ;
 CALL UserAuthentication('drstrange@marvel.com', '1234');
 
 DELIMITER //
+CREATE PROCEDURE GetAllUsers()
+    BEGIN
+        SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname
+        FROM User;
+    END //
+DELIMITER ;
+
+CALL GetAllUsers();
+
+DELIMITER //
 CREATE PROCEDURE GetUserById(IN uid INT)
     BEGIN
         SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname
@@ -61,24 +71,24 @@ CALL CreateNewUser('test@mail', '1234', 'Standard', 'test', 'object');
 CALL GetUserByEmail('test@mail');
 
 DELIMITER //
-CREATE PROCEDURE UpdateUserById(IN uid INT, IN firstname VARCHAR(50), IN lastname VARCHAR(50))
+CREATE PROCEDURE UpdateUserById(IN uid INT, IN role VARCHAR(50), IN firstname VARCHAR(50), IN lastname VARCHAR(50))
     BEGIN
         UPDATE User
-        SET User.Firstname = firstname, User.Lastname = lastname
+        SET User.Firstname = firstname, User.Lastname = lastname, User.Role = role
         WHERE User.Uid = uid;
     END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE UpdateUserByEmail(IN email VARCHAR(50), IN firstname VARCHAR(50), IN lastname VARCHAR(50))
+CREATE PROCEDURE UpdateUserByEmail(IN email VARCHAR(50), IN role VARCHAR(50), IN firstname VARCHAR(50), IN lastname VARCHAR(50))
     BEGIN
         UPDATE User
-        SET User.Firstname = firstname, User.Lastname = lastname
+        SET User.Firstname = firstname, User.Lastname = lastname, User.Role = role
         WHERE User.Email = email;
     END //
 DELIMITER ;
 
-CALL UpdateUserByEmail('test@mail', 'Captain', 'America');
+CALL UpdateUserByEmail('test@mail','Standard', 'Captain', 'America');
 CALL GetUserByEmail('test@mail');
 
 DELIMITER //
