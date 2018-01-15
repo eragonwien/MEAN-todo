@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 
 var indexctrl = require('../controllers/index');
+var userctrl = require('../controllers/user');
+var sessionctrl = require('../config/session')
 
 /* Un-protected routes */
 /* Home */
@@ -23,13 +25,14 @@ router.get('/logout', indexctrl.logout);
 
 /* Protected routes */
 /* Profile */
-router.get('/profile', indexctrl.IsUserLoggedIn, indexctrl.showProfile);
+router.get('/profile', indexctrl.IsUserLoggedIn, sessionctrl.cookies, indexctrl.showProfile);
+
+
 
 module.exports = function(passport){
-    router.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile',
-        failureRedirect: '/login'
-    }));
-    
+
+    /* authenticate user */
+    router.post('/login', userctrl.authenticateUser(passport));
+ 
     return router;
 };

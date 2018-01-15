@@ -1,4 +1,5 @@
 var user = require('../models/user');
+var sessionctrl = require('../config/session')
 var debug = require('debug')('index_ctrl');
 /* Homepage */
 exports.showHome = function(req, res, next){
@@ -21,7 +22,17 @@ exports.IsUserLoggedIn = function (req, res, next) {
         return;
     }
     res.redirect('/login');
-    
+}
+
+exports.IsUserAnAdmin = function (req, res, next) {
+    debug('ROLE: ' + JSON.stringify(req.session.passport.user.Role));
+    if (req.session.passport.user.Role == 'Admin') {
+        next();
+        return;
+    }
+    var error = new Error('Forbidden');
+    error.status = 403;
+    next(error);
 }
 
 /* Sign up */
