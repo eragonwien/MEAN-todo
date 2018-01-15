@@ -11,7 +11,6 @@ var strategy = new localstrategy({
         debug('email : ' + email + '//');
         users.getUserByEmail(email, function (error, user) {
             debug('error : ' + error + '//');            
-            user = user[0]; // take the first entry
             debug('user : ' + JSON.stringify(user) + '//');
             
             if (error) {
@@ -19,13 +18,12 @@ var strategy = new localstrategy({
             } 
             if (!user) {
                 debug('no user found');
-                return next(null, false);
+                return next(null, false, {'message': 'no user found'});
             }
             if (!users.passwordIsValid(password, user.Password)) {
                 debug('invalid password');
-                return next(null, false);
+                return next(null, false, {'message': 'invalid password'});
             }
-            debug('HERE');
         return next(null, user);
     });
 });
@@ -33,11 +31,11 @@ var strategy = new localstrategy({
 module.exports = function (passport) {
     // Session setup
     passport.serializeUser(function(user, next){
-        next(null, user.Email);
+        next(null, user);
     });
 
-    passport.deserializeUser(function (email, next) {
-        users.getUserByEmail(email, function(error, user){
+    passport.deserializeUser(function (user, next) {
+        users.getUserByEmail(user.Email, function(error, user){
             next(error, user);
         })
     });

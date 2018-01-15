@@ -8,9 +8,10 @@ var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var passport = require('passport');
 var session = require('express-session');
-
+//var debug = require('debug')('app');
 var index = require('./routes/index')(passport);
 var users = require('./routes/users');
+var projects = require('./routes/projects');
 
 var app = express();
 
@@ -18,18 +19,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// passport
+// add strategy to passport
 require('./config/passport')(passport);
 
-app.use(session({
-  secret: 'milleniumbalkon',
-  resave: true,
-  saveUninitialized: true,
-  cookie: {
-    expires: new Date(Date.now() + 60 * 60 * 1000) // 1 hours in miliseconds
-  }
-}));
+var sessionConfig = require('./config/session')
+app.use(session(sessionConfig.config));
 
+// refresh cookie by one hour
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/projects', projects);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -68,11 +65,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// add variables to request
-app.use(function (req, res, next) {
-  req.passport = passport;
-  req.session = session;
-  next();
-});
+
 
 module.exports = app;
