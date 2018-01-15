@@ -12,7 +12,6 @@ exports.pool = mysql.createPool({
   multipleStatements: true
 });
 
-
 exports.closePool = function(pool) {
 	pool.end(function(){
 		//console.log('Pool closed');
