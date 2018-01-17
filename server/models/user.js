@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt-nodejs');
 var debug = require('debug')('user-model');
 
 exports.getAllUsers = function(next) {
-    var cmd = 'SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname FROM User;';
+    var cmd = 'SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname, User.Last_Update FROM User;';
 
 	pool.query(cmd, function(error, results, fields){
 		if (error) {
@@ -14,7 +14,7 @@ exports.getAllUsers = function(next) {
 }
 
 exports.getUserByID = function(uid, next) {
-    var cmd = 'SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname FROM User WHERE User.Uid = ? LIMIT 1;';
+    var cmd = 'SELECT User.Uid, User.Email, User.Role, User.Firstname, User.Lastname, User.Last_Update FROM User WHERE User.Uid = ? LIMIT 1;';
 	var params = [uid];
 	
 	pool.query(cmd, params, function(error, results, fields){
@@ -26,7 +26,7 @@ exports.getUserByID = function(uid, next) {
 }
 
 exports.getUserByEmail = function(email, next) {
-    var cmd = 'SELECT User.Uid, User.Email, User.Password, User.Role, User.Firstname, User.Lastname FROM User WHERE User.Email = ? LIMIT 1;';
+    var cmd = 'SELECT User.Uid, User.Email, User.Password, User.Role, User.Firstname, User.Lastname, User.Last_Update FROM User WHERE User.Email = ? LIMIT 1;';
     var params = [email];
 
 	pool.query(cmd, params, function(error, results, fields){
@@ -37,11 +37,11 @@ exports.getUserByEmail = function(email, next) {
 	});
 }
 
-exports.CreateNewUser = function(user, next) {
+exports.createNewUser = function(user, next) {
 	var cmd = 'INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES(?, ?, ?, ?, ?);';
 
-	bcrypt.hash(user.password, null, null, function(err, hashedPassword){
-		var params = [user.email, hashedPassword, user.role, user.firstname, user.lastname];
+	bcrypt.hash(user.Password, null, null, function(err, hashedPassword){
+		var params = [user.Email, hashedPassword, user.Role, user.Firstname, user.Lastname];
 		pool.query(cmd, params, function(error, results, fields){
 			if (error) {
 				return next(error);
@@ -51,10 +51,10 @@ exports.CreateNewUser = function(user, next) {
 	});
 }
 
-exports.UpdateUserById = function(user, next) {
-	var cmd = 'UPDATE User SET User.Firstname = firstname, User.Lastname = lastname, User.Role = role WHERE User.Uid = uid;';
+exports.updateUserById = function(user, next) {
+	var cmd = 'UPDATE User SET User.Firstname = ?, User.Lastname = ?, User.Role = ? WHERE User.Uid = ? LIMIT 1;';
 
-	var params = [user.firstname, user.lastname, user.role, user.uid];
+	var params = [user.Firstname, user.Lastname, user.Role, user.Uid];
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
@@ -63,10 +63,10 @@ exports.UpdateUserById = function(user, next) {
 	});
 }
 
-exports.UpdateUserByEmail = function(user, next) {
-	var cmd = 'UPDATE User SET User.Firstname = ?, User.Lastname = ?, User.Role = ? WHERE User.Email = ?;';
+exports.updateUserByEmail = function(user, next) {
+	var cmd = 'UPDATE User SET User.Firstname = ?, User.Lastname = ?, User.Role = ? WHERE User.Email = ? LIMIT 1;';
 
-	var params = [user.firstname, user.lastname, user.role, user.email];
+	var params = [user.Firstname, user.Lastname, user.Role, user.Email];
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
@@ -75,7 +75,7 @@ exports.UpdateUserByEmail = function(user, next) {
 	});
 }
 
-exports.DeleteUserById = function(uid, next) {
+exports.deleteUserById = function(uid, next) {
 	var cmd = 'DELETE FROM User WHERE User.Uid = ? LIMIT 1;';
 	var params = [uid];
 	pool.query(cmd, params, function(error, results, fields){
@@ -86,7 +86,7 @@ exports.DeleteUserById = function(uid, next) {
 	});
 }
 
-exports.DeleteUserByEmail = function(email, next) {
+exports.deleteUserByEmail = function(email, next) {
 	var cmd = 'DELETE FROM User WHERE User.Email = ? LIMIT 1;';
 	var params = [email];
 	pool.query(cmd, params, function(error, results, fields){
@@ -97,7 +97,8 @@ exports.DeleteUserByEmail = function(email, next) {
 	});
 }
 
-exports.passwordIsValid = function (input, hash) {
-	return bcrypt.compareSync(input, hash);
+exports.checkPassword = function (input, hash, next) {
+	bcrypt.compare(input, hash, function(err, res) {
+		next(res);
+	});
 }
-
