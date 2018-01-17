@@ -43,7 +43,7 @@ exports.showSignup = function (req, res, next) {
 }
 
 exports.createNewUser = function (req, res, next) {
-    user.CreateNewUser(req.body, function(error, result){
+    user.createNewUser(req.body, function(error, result){
         if (error) {
             return next(error);
         }
