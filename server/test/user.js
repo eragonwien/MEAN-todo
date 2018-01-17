@@ -28,16 +28,16 @@ describe('Connect to SQL database', function () {
 var userModel = require('../models/user');
 describe('User', function () {
     var newUser = {
-        id: null,
-        email: 'test_' + new Date().getTime().toString(),
-        password: 'test',
-        role: 'Standard',
-        firstname: 'test',
-        lastname: 'case'
+        Uid: null,
+        Email: 'test_' + new Date().getTime().toString() + '@gmail.com',
+        Password: 'test',
+        Role: 'Standard',
+        Firstname: 'Max',
+        Lastname: 'Mustermann'
     }
 
     it('should create an user', function (done) {
-        userModel.CreateNewUser(newUser, function(error, results){
+        userModel.createNewUser(newUser, function(error, results){
             if (error) {
                 done(error);
                 return;
@@ -48,7 +48,7 @@ describe('User', function () {
     });
 
     it('The created user can be found by its email', function (done) {
-        userModel.getUserByEmail(newUser.email, function(error, result){
+        userModel.getUserByEmail(newUser.Email, function(error, result){
             if (error) {
                 done(error);
                 return;
@@ -56,75 +56,75 @@ describe('User', function () {
             result.should.not.be.an('array');
             result.should.have.property('Uid');
             result.should.have.property('Password');
-            result.should.have.property('Role').equal(newUser.role);
-            result.should.have.property('Email').equal(newUser.email);
-            result.should.have.property('Firstname').be.equal(newUser.firstname);
-            result.should.have.property('Lastname').equal(newUser.lastname);
-            newUser.id = result.Uid;
+            result.should.have.property('Role').equal(newUser.Role);
+            result.should.have.property('Email').equal(newUser.Email);
+            result.should.have.property('Firstname').be.equal(newUser.Firstname);
+            result.should.have.property('Lastname').equal(newUser.Lastname);
+            newUser.Uid = result.Uid;
             done();
         });
     });
 
     it('The created user can be found by its ID', function (done) {
-        userModel.getUserByID(newUser.id, function(error, result){
+        userModel.getUserByID(newUser.Uid, function(error, result){
             if (error) {
                 done(error);
                 return;
             }
             result.should.not.be.an('array');
-            result.should.have.property('Uid').be.equal(newUser.id);
-            result.should.have.property('Role').equal(newUser.role);
-            result.should.have.property('Email').equal(newUser.email);
-            result.should.have.property('Firstname').be.equal(newUser.firstname);
-            result.should.have.property('Lastname').equal(newUser.lastname);
+            result.should.have.property('Uid').be.equal(newUser.Uid);
+            result.should.have.property('Role').equal(newUser.Role);
+            result.should.have.property('Email').equal(newUser.Email);
+            result.should.have.property('Firstname').be.equal(newUser.Firstname);
+            result.should.have.property('Lastname').equal(newUser.Lastname);
             done();
         });
     });
 
-    newUser.firstname = 'Captain'; // update value of user
+    newUser.Firstname = 'Captain'; // update value of user
 
     it('The created user can be modified by its ID', function (done) {
-        userModel.UpdateUserById(newUser, function(error, result){
+        userModel.updateUserById(newUser, function(error, result){
             if (error) {
                 done(error);
                 return;
             }
-            userModel.getUserByID(newUser.id, function(error, result){
+            userModel.getUserByID(newUser.Uid, function(error, result){
                 if (error) {
                     done(error);
                     return;
                 }
                 result.should.not.be.an('array');
-                result.should.have.property('Uid').be.equal(newUser.id);
-                result.should.have.property('Role').equal(newUser.role);
-                result.should.have.property('Email').equal(newUser.email);
-                result.should.have.property('Firstname').be.equal(newUser.firstname);
-                result.should.have.property('Lastname').equal(newUser.lastname);
+                result.should.have.property('Uid').be.equal(newUser.Uid);
+                result.should.have.property('Role').equal(newUser.Role);
+                result.should.have.property('Email').equal(newUser.Email);
+                result.should.have.property('Firstname').be.equal(newUser.Firstname);
+                result.should.have.property('Lastname').equal(newUser.Lastname);
                 done();
             });
             
         });
     });
 
-    newUser.lastname = 'America'; // update value of user
+    newUser.Lastname = 'America'; // update value of user
 
     it('The created user can be modified by its ID', function (done) {
-        userModel.UpdateUserByEmail(newUser, function(error, result){
+        userModel.updateUserByEmail(newUser, function(error, result){
             if (error) {
                 done(error);
                 return;
             }
-            userModel.getUserByID(newUser.id, function(error, result){
+            userModel.getUserByID(newUser.Uid, function(error, result){
                 if (error) {
                     done(error);
                     return;
                 }
                 result.should.not.be.an('array');
-                result.should.have.property('Uid').be.equal(newUser.id);
-                result.should.have.property('Role').equal(newUser.role);
-                result.should.have.property('Email').equal(newUser.email);
-                result.should.have.property('Firstname').be.equal(newUser.firstname);
-                result.should.have.property('Lastname').equal(newUser.lastname);
+                result.should.have.property('Uid').be.equal(newUser.Uid);
+                result.should.have.property('Role').equal(newUser.Role);
+                result.should.have.property('Email').equal(newUser.Email);
+                result.should.have.property('Firstname').be.equal(newUser.Firstname);
+                result.should.have.property('Lastname').equal(newUser.Lastname);
                 done();
             });
             
@@ -132,17 +132,17 @@ describe('User', function () {
     });
 
     it('The created user can be deleted', function (done) {
-        userModel.DeleteUserById(newUser.id, function(error, del_result){
+        userModel.deleteUserById(newUser.Uid, function(error, del_result){
             if (error) {
                 done(error);
                 return;
             }
-            userModel.getUserByID(newUser.id, function(error, get_id_result){
+            userModel.getUserByID(newUser.Uid, function(error, get_id_result){
                 if (error) {
                     done(error);
                     return;
                 }
-                expect(get_id_result, "email result should be empty").to.be.an('undefined');
+                expect(get_id_result, "Email result should be empty").to.be.an('undefined');
 
                 userModel.getUserByEmail(newUser.email, function(error, get_email_result){
                     if (error) {
