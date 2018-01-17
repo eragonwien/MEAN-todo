@@ -12,8 +12,8 @@ exports.getAllTodos = function(next) {
 	});
 }
 
-exports.getAllTodosByUserAndProject = function(uid, pid, next) {
-    var cmd = 'SELECT Pid, Name, Target, Progress, Status FROM Todo WHERE Uid=? AND Pid=?;';
+exports.getAllTodosByProject = function(pid, next) {
+    var cmd = 'SELECT Tid, Pid, Text, Status, Last_Update FROM Todo WHERE Pid=?;';
     var params = [uid];
 	
 	pool.query(cmd, params, function(error, results, fields){
@@ -24,21 +24,21 @@ exports.getAllTodosByUserAndProject = function(uid, pid, next) {
 	});
 }
 
-exports.getSingleTodoByUserAndProject = function(uid, pid, tid, next) {
-    var cmd = 'SELECT Pid, Name, Target, Progress, Status FROM Project WHERE Uid=? AND Pid=?;';
-    var params = [uid, pid];
+exports.getTodoById = function(tid, next) {
+    var cmd = 'SELECT Tid, Pid, Text, Status, Last_Update FROM Todo WHERE Tid=? LIMIT 1;';
+    var params = [tid];
 	
-	pool.query(cmd, params, function(error, result, fields){
+	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
 		}
-		next(null, result);
+		next(null, results);
 	});
 }
 
-exports.createNewTodoByUserAndProject = function(pid, todo, next) {
-    var cmd = 'INSERT INTO Todo (Pid, Text) VALUES(?, ?)';
-    var params = [uid, todo.text];
+exports.createNewTodo = function(todo, next) {
+    var cmd = 'INSERT INTO Todo (Pid, Status, Text) VALUES(?, ?, ?);';
+    var params = [todo.Pid, todo.Status, todo.Text];
 	
 	pool.query(cmd, params, function(error, result, fields){
 		if (error) {
