@@ -6,12 +6,12 @@ var userctrl = require('../controllers/user');
 var indexcrtl = require('../controllers/index');
 var projectctrl = require('../controllers/project');
 /* GET users listing. */
-router.get('/', indexcrtl.IsUserLoggedIn, indexcrtl.IsUserAnAdmin, userctrl.getAllUsers);
-router.get('/:id', indexcrtl.IsUserLoggedIn, indexcrtl.IsUserAnAdmin, userctrl.getUserByID);
+router.get('/', userctrl.getAllUsers);
+router.get('/:id', userctrl.getUserByID);
 
 /* Project listings */
-router.get('/:uid/projects', indexcrtl.IsUserLoggedIn, indexcrtl.IsUserAnAdmin, projectctrl.getAllProjectsByUserId);
-router.get('/:uid/projects/:pid', indexcrtl.IsUserLoggedIn, indexcrtl.IsUserAnAdmin, projectctrl.getSingleProjectByUserId);
+router.get('/:uid/projects', projectctrl.getAllProjectsByUserId);
+router.get('/:uid/projects/:pid', projectctrl.getSingleProjectByUserId);
 
 /*
 /users/:uid/projects/:pid/todos
