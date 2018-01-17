@@ -2,7 +2,7 @@ var pool = require('./connect').pool;
 var debug = require('debug')('project-model');
 
 exports.getAllProjects = function(next) {
-    var cmd = 'SELECT Pid, Uid, Name, Target, Progress, Status FROM Project;';
+    var cmd = 'SELECT Pid, Uid, Name, Target, Progress, Status, Last_Update FROM Project;';
 
 	pool.query(cmd, function(error, results, fields){
 		if (error) {
@@ -13,9 +13,8 @@ exports.getAllProjects = function(next) {
 }
 
 exports.getAllProjectsByUserId = function(uid, next) {
-    var cmd = 'SELECT Pid, Name, Target, Progress, Status FROM Project WHERE Uid=?;';
+    var cmd = 'SELECT Pid, Name, Target, Progress, Status, Last_Update FROM Project WHERE Uid=?;';
     var params = [uid];
-	
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
@@ -24,10 +23,9 @@ exports.getAllProjectsByUserId = function(uid, next) {
 	});
 }
 
-exports.getSingleProjectByUserId = function(uid, pid, next) {
-    var cmd = 'SELECT Pid, Name, Target, Progress, Status FROM Project WHERE Uid=? AND Pid=?;';
+exports.getProjectByUserId = function(uid, pid, next) {
+    var cmd = 'SELECT Pid, Name, Target, Progress, Status, Last_Update FROM Project WHERE Uid=? AND Pid=? LIMIT 1;';
     var params = [uid, pid];
-	
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
@@ -36,13 +34,9 @@ exports.getSingleProjectByUserId = function(uid, pid, next) {
 	});
 }
 
-// TODO: get all projects by user email
-// TODO: get project by pid and user email
-
-exports.CreateNewProjectByUserId = function(uid, project, next) {
-	var cmd = 'INSERT INTO Project (Uid, Name, Target) VALUES(?, ?, ?);';
-
-    var params = [uid, project.name, project.target];
+exports.createNewProjectByUserId = function(uid, project, next) {
+	var cmd = 'INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(?, ?, ?, ?, ?);';
+    var params = [uid, project.Name, project.Target, project.Progress, project.Status];
     pool.query(cmd, params, function(error, results, fields){
         if (error) {
             return next(error);
@@ -51,12 +45,25 @@ exports.CreateNewProjectByUserId = function(uid, project, next) {
     });
 }
 
-// TODO: create project by email
-// TODO: update project by user id and pid
-// TODO: update project by user email and pid
-// TODO: delete project by user id and pid
+exports.updateProjectById = function(project, next) {
+	var cmd = 'UPDATE Project SET Name=?, Target=?, Progress=?, Status=? WHERE Project.Pid = ? AND Project.Uid=? LIMIT 1;';
 
+	var params = [project.Name, project.Target, project.Progress, project.Status, project.Pid, project.Uid];
+	pool.query(cmd, params, function(error, results, fields){
+		if (error) {
+			return next(error);
+		}
+		next(null, results);
+	});
+}
 
-
-
-/* Project & User */
+exports.deleteProjectByUserId = function(uid, project, next) {
+	var cmd = 'DELETE FROM Project WHERE Uid=? AND Pid=? LIMIT 1;';
+    var params = [uid, pid];
+    pool.query(cmd, params, function(error, results, fields){
+        if (error) {
+            return next(error);
+        }
+        next(null, results);
+    });
+}
