@@ -39,7 +39,7 @@ exports.getUserByEmail = function(email, next) {
 
 exports.createNewUser = function(user, next) {
 	var cmd = 'INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES(?, ?, ?, ?, ?);';
-
+	debug(user);
 	bcrypt.hash(user.Password, null, null, function(err, hashedPassword){
 		var params = [user.Email, hashedPassword, user.Role, user.Firstname, user.Lastname];
 		pool.query(cmd, params, function(error, results, fields){

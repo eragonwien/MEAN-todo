@@ -17,9 +17,9 @@ describe('Connect to SQL database', function () {
                 done(error);
                 return;
             }
-            result.should.be.an('array');
-            result[0].should.have.property('solution');
-            result[0].solution.should.be.equal(1);
+            expect(result, "result is an array.").to.be.an('array');
+            expect(result[0], "a solution must exist.").to.have.property('solution');
+            expect(result[0].solution, "the solution is 1.").to.be.equal(1);
             done();
         });
     });
@@ -53,7 +53,7 @@ describe('User', function () {
                 done(error);
                 return;
             }
-            result.should.not.be.an('array');
+            expect(result, "result is an array.").not.to.be.an('array');
             result.should.have.property('Uid');
             result.should.have.property('Password');
             result.should.have.property('Role').equal(newUser.Role);
@@ -154,5 +154,78 @@ describe('User', function () {
                 });
             });
         });
+    });
+});
+
+describe('CRUD operations of users', function () {
+    it('production mode is turned off', function (done) {
+        expect(process.env.NODE_ENV, "production mode is turned off").not.to.be.equal('production');
+        done();
+    });
+    var newUser = {
+        Uid: null,
+        Email: 'test_' + new Date().getTime().toString() + '@gmail.com',
+        Password: 'test',
+        Role: 'Standard',
+        Firstname: 'first_' + new Date().getTime().toString(),
+        Lastname: 'last_' + new Date().getTime().toString()
+    }
+    it('should get All users on GET /api/users', function (done) {
+        chai.request(server)
+            .get('/api/users')
+            .end(function(error, result){
+                expect(result, 'server responds 200').to.have.status(200);
+                done();
+            });
+    });
+    it('should create ONE user on POST /signup', function (done) {
+        chai.request(server)
+            .post('/signup')
+            .send(newUser)
+            .end(function (error, result) {
+                expect(result, 'server responds 200').to.have.status(200);
+                expect(result, 'response is JSON').to.be.json;
+                expect(result.body, 'respond body has ID').to.have.property('insertId');
+                newUser.Uid = result.body.insertId;
+                done();                
+            });
+    });
+    it('should get ONE just created user on GET /api/users/:Uid', function (done) {
+        chai.request(server)
+            .get('/api/users/' + newUser.Uid)
+            .end(function(error, result){
+                expect(result, 'server responds 200').to.have.status(200);
+                expect(result, 'response is JSON').to.be.json;
+                expect(result.body, 'respond body has ID').to.have.property('Uid');
+                expect(result.body.Uid, 'respond body has the correct ID').to.be.equal(newUser.Uid);
+                expect(result.body, 'respond body has email').to.have.property('Email');
+                expect(result.body.Email, 'respond body has correct email').to.be.equal(newUser.Email);
+                done();
+            });
+    });
+    it('should update ONE just created user on PUT /api/users/:Uid', function (done) {
+        chai.request(server)
+            .get('/api/users/' + newUser.Uid)
+            .end(function(error, result){
+                newUser.Firstname = 'updated_firstname';
+                result.body.Firstname = newUser.Firstname;
+                chai.request(server)
+                    .put('/api/users/' + newUser.Uid)
+                    .send(result.body)
+                    .end(function (err, res) {
+                        expect(res, 'server responds 200').to.have.status(200);
+                        expect(res, 'response is JSON').to.be.json;  
+                        done();
+                    });
+            });
+    });
+    it('should delete ONE created user on DELETE /api/users/:Uid', function (done) {
+        chai.request(server)
+            .delete('/api/users/' + newUser.Uid)
+            .end(function (error, result) {
+                expect(result, 'server responds 200').to.have.status(200);    
+                console.log(result.body);  
+                done();         
+            });
     });
 });

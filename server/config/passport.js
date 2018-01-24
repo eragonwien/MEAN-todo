@@ -3,8 +3,8 @@ var debug = require('debug')('passport-local-login');
 var users = require('../models/user');
 
 var strategy = new localstrategy({
-    usernameField: 'email',
-    passwordField: 'password',
+    usernameField: 'Email',
+    passwordField: 'Password',
     passReqToCallback: true
     }, 
     function (req, email, password, next) {

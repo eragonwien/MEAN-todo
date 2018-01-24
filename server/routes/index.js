@@ -10,14 +10,14 @@ var sessionctrl = require('../config/session')
 /* Un-protected routes */
 /* Home */
 router.get('/', indexctrl.showHome);
+router.get('/api', indexctrl.showApi);
 
 /* Login */
 router.get('/login', indexctrl.showLogin);
 
-
 /* Sign up */
 router.get('/signup', indexctrl.showSignup);
-router.post('/signup', indexctrl.createNewUser);
+router.post('/signup', userctrl.createNewUser);
 
 
 /* Log out */
