@@ -35,7 +35,10 @@ gulp.task('minijs', function () {
         .pipe(gulp.dest('public'))   
 });
 
-gulp.task('public', ['browser-sync', 'sass', 'minijs']);
+gulp.task('public', ['sass', 'minijs'], function () {
+    return gulp.src('public/*')
+    .pipe(gulp.dest('../docs'))
+});
 
 gulp.task('watch', ['browser-sync', 'sass'], function () {
     gulp.watch('src/sass/**/*.scss', ['sass', 'browser-sync-reload']);
