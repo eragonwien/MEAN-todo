@@ -33,6 +33,10 @@ exports.IsUserLoggedIn = function (req, res, next) {
 }
 
 exports.IsUserAnAdmin = function (req, res, next) {
+    if (process.env.NODE_ENV != 'production') {
+        next();
+        return;
+    }
     if (req.isAuthenticated()) {
         if (req.session.passport.user.Role == 'Admin') {
             next();

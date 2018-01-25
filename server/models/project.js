@@ -23,7 +23,7 @@ exports.getAllProjectsByUserId = function(uid, next) {
 	});
 }
 
-exports.getProjectByUserId = function(uid, pid, next) {
+exports.getProjectById = function(uid, pid, next) {
     var cmd = 'SELECT Pid, Name, Target, Progress, Status, Last_Update FROM Project WHERE Uid=? AND Pid=? LIMIT 1;';
     var params = [uid, pid];
 	pool.query(cmd, params, function(error, results, fields){
@@ -45,10 +45,10 @@ exports.createNewProjectByUserId = function(uid, project, next) {
     });
 }
 
-exports.updateProjectById = function(project, next) {
+exports.updateProjectById = function(uid, pid, project, next) {
 	var cmd = 'UPDATE Project SET Name=?, Target=?, Progress=?, Status=? WHERE Project.Pid = ? AND Project.Uid=? LIMIT 1;';
 
-	var params = [project.Name, project.Target, project.Progress, project.Status, project.Pid, project.Uid];
+	var params = [project.Name, project.Target, project.Progress, project.Status, pid, uid];
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);
@@ -57,7 +57,7 @@ exports.updateProjectById = function(project, next) {
 	});
 }
 
-exports.deleteProjectByUserId = function(uid, project, next) {
+exports.deleteProjectById = function(uid, pid, next) {
 	var cmd = 'DELETE FROM Project WHERE Uid=? AND Pid=? LIMIT 1;';
     var params = [uid, pid];
     pool.query(cmd, params, function(error, results, fields){
