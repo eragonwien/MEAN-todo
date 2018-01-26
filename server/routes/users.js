@@ -13,8 +13,11 @@ router.put('/:uid', indexcrtl.IsUserAnAdmin, userctrl.updateUserById);
 router.delete('/:uid', indexcrtl.IsUserAnAdmin, userctrl.deleteUserById);
 router.get('/:uid', indexcrtl.IsUserAnAdmin, userctrl.getUserByID);
 
-/*
-/users/:uid/projects/:pid/todos
-/users/:uid/projects/:pid/todos/:tid
-*/
+
+router.get('/:uid/projects', indexcrtl.IsUserAnAdmin, projectctrl.getAllProjectsByUserId);
+router.get('/:uid/projects/:pid', indexcrtl.IsUserAnAdmin, projectctrl.getProjectByUserId);
+router.post('/:uid/projects', indexcrtl.IsUserAnAdmin, projectctrl.createNewProjectByUserId);
+router.put('/:uid/projects/:pid', indexcrtl.IsUserAnAdmin, projectctrl.updateProjectById);
+router.delete('/:uid/projects/:pid', indexcrtl.IsUserAnAdmin, projectctrl.deleteProjectById);
+
 module.exports = router;

@@ -3,7 +3,7 @@ var sessionctrl = require('../config/session')
 var debug = require('debug')('index_ctrl');
 /* Homepage */
 exports.showHome = function(req, res, next){
-    if (process.env.NODE_ENV == 'api_dev') {
+    if (process.env.NODE_ENV == 'development-api') {
         res.redirect('/api');
         return;
     }

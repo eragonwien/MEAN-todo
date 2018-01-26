@@ -8,25 +8,8 @@ var should = chai.should();
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-/* sql connection */
-var testModel = require('../models/test');
-describe('Connect to SQL database', function () {
-    it('should connect to database and return a solution', function (done) {
-        testModel.testSql(function(error, result){
-            if (error) {
-                done(error);
-                return;
-            }
-            expect(result, "result is an array.").to.be.an('array');
-            expect(result[0], "a solution must exist.").to.have.property('solution');
-            expect(result[0].solution, "the solution is 1.").to.be.equal(1);
-            done();
-        });
-    });
-});
-
 var userModel = require('../models/user');
-describe('User', function () {
+describe('User Modell Test', function () {
     var newUser = {
         Uid: null,
         Email: 'test_' + new Date().getTime().toString() + '@gmail.com',
@@ -157,7 +140,7 @@ describe('User', function () {
     });
 });
 
-describe('CRUD operations of users', function () {
+describe('User CRUD Test', function () {
     it('production mode is turned off', function (done) {
         expect(process.env.NODE_ENV, "production mode is turned off").not.to.be.equal('production');
         done();
@@ -203,7 +186,7 @@ describe('CRUD operations of users', function () {
                 done();
             });
     });
-    it('should update ONE just created user on PUT /api/users/:Uid', function (done) {
+    it('should update ONE just created user on PUT /api/users/:uid', function (done) {
         chai.request(server)
             .get('/api/users/' + newUser.Uid)
             .end(function(error, result){
