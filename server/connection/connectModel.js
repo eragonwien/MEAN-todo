@@ -1,4 +1,4 @@
-var pool = require('./connect').pool;
+var pool = require('../connection/connect').pool;
 
 exports.testSql = function(next) {
     var cmd = 'SELECT 1 as solution;';

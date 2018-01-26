@@ -1,4 +1,4 @@
-var pool = require('./connect').pool;
+var pool = require('../connection/connect').pool;
 var bcrypt = require('bcrypt-nodejs');
 var debug = require('debug')('user-model');
 

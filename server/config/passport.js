@@ -1,6 +1,6 @@
 var localstrategy = require('passport-local').Strategy;
 var debug = require('debug')('passport-local-login');
-var users = require('../models/user');
+var users = require('../users/userModel');
 
 var strategy = new localstrategy({
     usernameField: 'Email',

@@ -1,4 +1,4 @@
-var user = require('../models/project');
+var user = require('./projectModel');
 var debug = require('debug')('project_controller')
 
 exports.getAllProjects = function (req, res, next) {

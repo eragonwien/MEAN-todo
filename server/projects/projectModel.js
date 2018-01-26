@@ -1,4 +1,4 @@
-var pool = require('./connect').pool;
+var pool = require('../connection/connect').pool;
 var debug = require('debug')('project-model');
 
 exports.getAllProjects = function(next) {

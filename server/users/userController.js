@@ -1,4 +1,4 @@
-var user = require('../models/user');
+var user = require('./userModel');
 var debug = require('debug')('user_controller')
 
 exports.getAllUsers = function (req, res, next) {

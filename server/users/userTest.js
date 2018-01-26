@@ -8,7 +8,7 @@ var should = chai.should();
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-var userModel = require('../models/user');
+var userModel = require('./userModel');
 describe('User Modell Test', function () {
     var newUser = {
         Uid: null,

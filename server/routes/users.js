@@ -2,9 +2,9 @@
 var express = require('express');
 var router = express.Router();
 
-var userctrl = require('../controllers/user');
-var indexcrtl = require('../controllers/index');
-var projectctrl = require('../controllers/project');
+var userctrl = require('../users/userController');
+var indexcrtl = require('../users/indexController');
+var projectctrl = require('../projects/projectController');
 /* GET users listing. */
 router.get('/', indexcrtl.IsUserAnAdmin, userctrl.getAllUsers);
 

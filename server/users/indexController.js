@@ -1,4 +1,4 @@
-var user = require('../models/user');
+var user = require('./userModel');
 var sessionctrl = require('../config/session')
 var debug = require('debug')('index_ctrl');
 /* Homepage */

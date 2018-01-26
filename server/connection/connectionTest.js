@@ -9,10 +9,10 @@ var expect = chai.expect;
 chai.use(chaiHttp);
 
 /* sql connection */
-var testModel = require('../models/test');
+var connectionModel = require('./connectModel');
 describe('Connect to SQL database', function () {
     it('should connect to database and return a solution', function (done) {
-        testModel.testSql(function(error, result){
+        connectionModel.testSql(function(error, result){
             if (error) {
                 done(error);
                 return;
