@@ -5,16 +5,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sassMiddleware = require('node-sass-middleware');
 var passport = require('passport');
-//var session = require('express-session');
 var cookieSession = require('cookie-session');
 var index = require('./routes/index')(passport);
 var users = require('./routes/users');
 var projects = require('./routes/projects');
 var todos = require('./routes/todos');
 var gzip = require('compression');
-var flash = require('req-flash');
 var app = express();
 
 // view engine setup
@@ -40,14 +37,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(sassMiddleware({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  indentedSyntax: false, // true = .sass and false = .scss
-  sourceMap: true
-}));
 
-app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
