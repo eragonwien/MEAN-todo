@@ -16,7 +16,7 @@ gulp.task('sass', function () {
 
 gulp.task('browser-sync', function () {
     browserSync.init({
-        port: 3000,
+        port: 4000,
         server: {
             baseDir: 'public'
         }
@@ -40,7 +40,7 @@ gulp.task('public', ['sass', 'minijs'], function () {
     .pipe(gulp.dest('../docs'))
 });
 
-gulp.task('watch', ['browser-sync', 'sass'], function () {
+gulp.task('watch', ['browser-sync', 'sass', 'minijs'], function () {
     gulp.watch('src/sass/**/*.scss', ['sass', 'browser-sync-reload']);
     gulp.watch('src/index.html', ['minijs', 'browser-sync-reload']);
     gulp.watch('src/js/**/*.js', ['minijs', 'browser-sync-reload']);
