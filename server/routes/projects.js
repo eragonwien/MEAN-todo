@@ -4,7 +4,7 @@ var router = express.Router();
 var projectctrl = require('../projects/projectController');
 var indexcrtl = require('../users/indexController');
 
-router.get('/', indexcrtl.IsUserAnAdmin, projectctrl.getAllProjects);
+router.get('/', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkAdminOnly, projectctrl.getAllProjects);
 
 
 module.exports = router;

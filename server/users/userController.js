@@ -6,7 +6,7 @@ exports.getAllUsers = function (req, res, next) {
         if (error) {
             return next(error);
         }
-        res.json(result);
+        res.status(200).json(result);
     });
 }
 
@@ -15,7 +15,7 @@ exports.getUserByID = function (req, res, next) {
         if (error) {
             return next(error);
         }
-        res.json(result);
+        res.status(200).json(result);
     });
 }
 
@@ -54,16 +54,15 @@ exports.authenticateUser = function(passport) {
                 debug('error');
                 return next(err);
             }
-            var message = (info) ? info.message : '';
             if (!user) {
-                debug('no user');
+                debug(info.message);
                 return res.status(401).end();
             }
             req.logIn(user, function(err) {
                 if (err) {
                     return next(err);
                 }
-                return res.status(200).end();
+                return res.status(200).redirect('/profile');
               });
         })(req, res, next);
     };

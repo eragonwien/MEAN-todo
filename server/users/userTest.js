@@ -157,6 +157,9 @@ describe('User CRUD Test', function () {
         chai.request(server)
             .get('/api/users')
             .end(function(error, result){
+                if (error) {
+                    return done(error);
+                }
                 expect(result, 'server responds 200').to.have.status(200);
                 done();
             });
@@ -207,7 +210,6 @@ describe('User CRUD Test', function () {
             .delete('/api/users/' + newUser.Uid)
             .end(function (error, result) {
                 expect(result, 'server responds 200').to.have.status(200);    
-                console.log(result.body);  
                 done();         
             });
     });

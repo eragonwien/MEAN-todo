@@ -32,7 +32,7 @@ exports.getTodoById = function(tid, next) {
 		if (error) {
 			return next(error);
 		}
-		next(null, results);
+		next(null, results[0]);
 	});
 }
 
@@ -50,7 +50,7 @@ exports.createNewTodo = function(todo, next) {
 
 exports.updateTodoByTid = function(tid, updatedTodo, next) {
     var cmd = 'UPDATE Todo SET Pid=?, Text=?, Status=? WHERE Tid = ?;';
-    var params = [updatedTodo.pid, updatedTodo.text, updatedTodo.status, tid];
+    var params = [updatedTodo.Pid, updatedTodo.Text, updatedTodo.Status, tid];
 	
 	pool.query(cmd, params, function(error, result, fields){
 		if (error) {

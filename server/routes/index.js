@@ -19,15 +19,12 @@ router.get('/login', indexctrl.showLogin);
 router.get('/signup', indexctrl.showSignup);
 router.post('/signup', userctrl.createNewUser);
 
-
 /* Log out */
 router.get('/logout', indexctrl.logout);
 
 /* Protected routes */
 /* Profile */
-router.get('/profile', indexctrl.IsUserLoggedIn, sessionctrl.cookies, indexctrl.showProfile);
-
-
+router.get('/profile', indexctrl.checkIfUserLoggedIn, indexctrl.showProfile);
 
 module.exports = function(passport){
 

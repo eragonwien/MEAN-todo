@@ -47,7 +47,7 @@ exports.updateProjectById = function(req, res, next){
 }
 
 exports.deleteProjectById = function(req, res, next) {
-    user.deleteProjectById(req.params.uid, req.params.uid, function (error, result) {
+    user.deleteProjectById(req.params.uid, req.params.pid, function (error, result) {
         if (error) {
             return next(error);
         }

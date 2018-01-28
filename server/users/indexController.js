@@ -3,7 +3,7 @@ var sessionctrl = require('../config/session')
 var debug = require('debug')('index_ctrl');
 /* Homepage */
 exports.showHome = function(req, res, next){
-    if (process.env.NODE_ENV == 'development-api') {
+    if (process.env.NODE_ENV == 'api_development') {
         res.redirect('/api');
         return;
     }
@@ -24,27 +24,58 @@ exports.UserLogin = function (req, res, next) {
     res.redirect('/login');
 }
 
-exports.IsUserLoggedIn = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-        return;
-    }
-    res.status(401).end();
-}
-
-exports.IsUserAnAdmin = function (req, res, next) {
+exports.checkIfUserLoggedIn = function (req, res, next) {
+    // bypass checking in development
     if (process.env.NODE_ENV != 'production') {
         next();
         return;
     }
+
     if (req.isAuthenticated()) {
-        if (req.session.passport.user.Role == 'Admin') {
-            next();
-            return;
-        }
-        return res.status(403).end();
+        next();
+        return;
     }
-    res.status(401).end();
+    res.status(401).redirect('/login');
+}
+
+/*
+    use for unprotected route
+    admin and regular user can access
+    preventing one user accessing other user's profile
+ */
+exports.checkUserAccess = function (req, res, next) {
+    // bypass checking in api development
+    if (process.env.NODE_ENV != 'production') {
+        next();
+        return;
+    }
+    // bypass as admin
+    if (req.session.passport.user.Role == 'Admin') {
+        next();
+        return;
+    }
+
+    // check if user has the matched id
+    if (req.session.passport.user.Uid == req.params.uid) {
+        next();
+        return;
+    }
+    res.status(403).end();
+}
+
+/* use for protected route */
+exports.checkAdminOnly = function (req, res, next) {
+    // bypass checking in development
+    if (process.env.NODE_ENV != 'production') {
+        next();
+        return;
+    }
+    // only admin can bypass
+    if (req.session.passport.user.Role == 'Admin') {
+        next();
+        return;
+    }
+    res.status(403).end();
 }
 
 /* Sign up */
@@ -65,11 +96,6 @@ exports.showProfile = function (req, res, next) {
 /* Log out */
 exports.logout = function (req, res, next) {
     req.logout();
-    req.session.destroy(function (error) {
-        if (error) {
-            next(error);
-            return;
-        }
-    });
-    res.status(200).end();
+    req.session = null;
+    res.status(200).redirect('/login');
 }
