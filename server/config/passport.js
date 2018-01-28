@@ -21,12 +21,6 @@ var strategy = new localstrategy({
                 debug('no user found');
                 return next(null, false, {'message': 'no user found'});
             }
-            /*
-            if (!users.passwordIsValid(password, user.Password)) {
-                debug('invalid password');
-                return next(null, false, {'message': 'invalid password'});
-            }
-            */
             users.checkPassword(password, user.Password, function(result){
                 if (result) {
                     debug('invalid password');

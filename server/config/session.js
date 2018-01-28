@@ -1,18 +1,13 @@
 var debug = require('debug')('session_cookie');
 exports.config = {
-    secret: 'milleniumbalkon',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {maxAge: 3600000}
+    //resave: false,
+    //saveUninitialized: true,
+    name: 'session_meantodo',
+    keys: ['milleniumBalkon'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours cookie 
 };
 
-exports.cookies = function(req, res, next){
-    var minutes = process.env.COOKIE_AGE_MINUTES;
-    var hour = (minutes)? minutes : 60; // default 60 minutes
-    hour *= 60 * 1000;
-    
-    req.session.cookie.expires = new Date(Date.now() + hour);
-    req.session.cookie.maxAge = hour;
-    debug('cookie:' + req.session.cookie.expires);
+exports.extendCookie = function(req, res, next){
+    req.session.nowInMinutes = Math.floor(Date.now() / 60e3)
     next();
 };
