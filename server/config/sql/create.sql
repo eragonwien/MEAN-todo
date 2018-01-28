@@ -15,15 +15,15 @@ CREATE TABLE IF NOT EXISTS User(
 CREATE TABLE IF NOT EXISTS Project (
     Pid INT NOT NULL AUTO_INCREMENT,
     Uid INT NOT NULL,
-    Name VARCHAR(30) NOT NULL DEFAULT 'Un-titled',
+    Name VARCHAR(30) NOT NULL,
     Target VARCHAR(255) NOT NULL,
-    Progress INT NOT NULL DEFAULT 0,
-    Status VARCHAR(50) NOT NULL DEFAULT 'Incomplete',
+    Progress INT NOT NULL,
+    Status VARCHAR(50) NOT NULL,
     Last_Update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (Pid),
     FOREIGN KEY (Uid) REFERENCES User(Uid),
     CONSTRAINT CHK_Progress CHECK (Progress BETWEEN 0 and 100),
-    CONSTRAINT CHK_Status CHECK (Status IN('Incomplete', 'Complete'))        
+    CONSTRAINT CHK_Status CHECK (Status IN('None','Incomplete', 'Complete'))        
 );
 
 CREATE TABLE IF NOT EXISTS Todo (
@@ -43,10 +43,10 @@ INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange@
 INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange2@marvel.com', '1234', 'Standard', 'Stephen', 'Strange');
 
 
-INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange first act.', 'Reaching the sacred temple');
-INSERT INTO Project (Uid, Name, Target) VALUES(1, 'Dr. Strange second act.', 'Becoming a sorcerer');
-INSERT INTO Project (Uid, Name, Target) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer');
-INSERT INTO Project (Uid, Name, Target) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer');
+INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(1, 'Dr. Strange first act.', 'Reaching the sacred temple', 0, 'None');
+INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(1, 'Dr. Strange second act.', 'Becoming a sorcerer', 0, 'None');
+INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer', 0, 'None');
+INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer', 0, 'None');
 
 
 INSERT INTO Todo (Pid, Text) VALUES(1, 'Being a good doctor');
