@@ -35,13 +35,21 @@ gulp.task('minijs', function () {
         .pipe(gulp.dest('public'))   
 });
 
-gulp.task('public', ['sass', 'minijs'], function () {
-    return gulp.src('public/*')
-    .pipe(gulp.dest('../docs'))
+gulp.task('favicon', function () {
+    return gulp.src('src/favicon.ico')
+        .pipe(gulp.dest('public'))
 });
 
-gulp.task('watch', ['browser-sync', 'sass', 'minijs'], function () {
+gulp.task('bundle', ['sass', 'minijs', 'favicon']);
+
+gulp.task('watch', ['browser-sync', 'bundle'], function () {
     gulp.watch('src/sass/**/*.scss', ['sass', 'browser-sync-reload']);
     gulp.watch('src/index.html', ['minijs', 'browser-sync-reload']);
     gulp.watch('src/js/**/*.js', ['minijs', 'browser-sync-reload']);
+    gulp.watch('src/favicon.ico', ['favicon', 'browser-sync-reload']);
+});
+
+gulp.task('public', ['bundle'], function () {
+    return gulp.src('public/*')
+    .pipe(gulp.dest('../docs'))
 });
