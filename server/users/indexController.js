@@ -12,10 +12,7 @@ exports.showHome = function(req, res, next){
 
 exports.showApi = function(req, res, next){
     //res.render('api');
-    req.flash('message', 'MESSAGE');
-    res.render('api', {
-        message: req.flash('message')
-    })
+    res.render('api');
 }
 /* Login */
 exports.showLogin = function (req, res, next) {
@@ -23,9 +20,7 @@ exports.showLogin = function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect('/profile');
     }
-    res.render('login.ejs', {
-        message: req.flash('message')
-    });
+    res.render('login.ejs');
 }
 
 exports.UserLogin = function (req, res, next) {
@@ -88,9 +83,7 @@ exports.checkAdminOnly = function (req, res, next) {
 
 /* Sign up */
 exports.showSignup = function (req, res, next) {
-    res.render('signup.ejs', {
-        message: req.flash('message')
-    });
+    res.render('signup.ejs');
 }
 
 
