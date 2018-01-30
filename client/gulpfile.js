@@ -6,9 +6,11 @@ var uglify = require('gulp-uglify');
 var cssnano = require('gulp-cssnano');
 var gulpIf = require('gulp-if');
 var plumber = require('gulp-plumber');
-
+var imagemin = require('gulp-imagemin');
+var cache = require('gulp-cache');
+var runSequence = require('run-sequence');
 /* browser sync */
-gulp.task('browser-sync', function () {
+gulp.task('sync', function () {
     browserSync.init({
         port: 4000,
         server: {
@@ -17,7 +19,7 @@ gulp.task('browser-sync', function () {
     });
 });
 
-gulp.task('browser-sync-reload', function () {
+gulp.task('sync-reload', function () {
     browserSync.reload();
 });
 
@@ -35,12 +37,16 @@ gulp.task('js', function () {
     return gulp.src('src/index.html')
         .pipe(plumber())    
         .pipe(userref())
-        .pipe(gulpIf('*.js', uglify()))
+        //.pipe(gulpIf('*.js', uglify()))
         .pipe(gulp.dest('public'))   
 });
 
 /* minify images */
-
+gulp.task('image', function () {
+    return gulp.src('src/images/**/*.+(png|jpg|jpeg|gif|png)')
+        .pipe(cache(imagemin()))
+        .pipe(gulp.dest('public/images'))
+})
 /* gzip */
 
 /* other transfer to public */
@@ -50,7 +56,13 @@ gulp.task('favicon', function () {
 });
 
 /* public */
-gulp.task('public', ['sass', 'js', 'favicon']);
+gulp.task('public', function () {
+    runSequence('sass', 'image', 'js', 'favicon')
+});
+
+gulp.task('public-sync', function () {
+    runSequence('sass', 'image', 'js', 'favicon', 'sync')
+});
 
 /* transfer to docs */
 gulp.task('docs', function () {
@@ -58,6 +70,10 @@ gulp.task('docs', function () {
         .pipe(gulp.dest('../docs'))
 })
 /* watch */
-gulp.task('watch', ['minicss'], function () {
-    gulp.watch('public/stylesheets/style.css', ['minicss']);
+gulp.task('watch', ['public-sync'], function () {
+    gulp.watch('src/sass/**/*.scss', ['sass', 'sync-reload']);
+    gulp.watch('src/js/**/*.js', ['js', 'sync-reload']);
+    gulp.watch('src/favicon.ico', ['favicon', 'sync-reload']);
+    gulp.watch('src/images/*', ['image', 'sync-reload']);
+    gulp.watch('src/*.html', ['public', 'sync-reload']);
 });

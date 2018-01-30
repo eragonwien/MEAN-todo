@@ -1,0 +1,13 @@
+button, .button {
+    padding: 1rem 1rem;
+    margin: auto;
+    color: $dark;
+    text-decoration: none;
+    background-color: $light;
+    border: 2px solid black;
+    cursor: pointer;
+}
+button:hover, .button:hover {
+    color: $light;
+    background-color: $dark;
+}

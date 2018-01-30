@@ -32,10 +32,12 @@ var strategy = new localstrategy({
 module.exports = function (passport) {
     // Session setup
     passport.serializeUser(function(user, next){
+        debug('SERIALIZED');
         next(null, user);
     });
 
     passport.deserializeUser(function (user, next) {
+        debug('DESERIALIZED');        
         users.getUserByEmail(user.Email, function(error, user){
             next(error, user);
         })

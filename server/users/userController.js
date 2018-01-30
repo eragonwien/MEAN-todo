@@ -55,15 +55,13 @@ exports.authenticateUser = function(passport) {
                 return next(err);
             }
             if (!user) {
-                debug(info.message);
-                req.flash('message', info.message);
-                return res.status(401).end();
+                return res.status(401).json({message: info.message});
             }
             req.logIn(user, function(err) {
                 if (err) {
                     return next(err);
                 }
-                return res.status(200).end();
+                return res.status(200).json(user);
               });
         })(req, res, next);
     };

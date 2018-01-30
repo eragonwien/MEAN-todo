@@ -1,24 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Login</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="icon" href="favicon.ico" />
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="red">Login</h1>
-      <form action="/login" method="post">
-          <input type="email" name="Email">
-          <input type="password" name="Password">
-          <input type="submit" name="submit" value="Login">
-      </form>
-      <p>Not registered ? <a href="/signup">signup now</a></p>
-      <form action="/login" method="post">
-        <input type="hidden" name="Email" value="sp@m">
-        <input type="hidden" name="Password" value="test">
-        <input type="submit" value="Login as Guest">
-      </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <title>Document</title>
+</head>
+<body ng-app="meantodo" ng-controller="masterController as master">
+    <nav>
+        <a href="#">HOME</a>
+        <a href="">{{master.link}}</a>
+    </nav>
+    <div ng-controller="loginController as login" ng-if="master.login">
+        <small>{{login.response.status}}{{login.response.statusText}}: {{login.response.message}}</small>        
+            <form ng-submit="login.login()" >
+                <label for="Email">Email: </label>
+                <input type="email" name="Email" ng-model="login.user.Email">
+                <label for="Password">Password: </label>
+                <input type="password" name="Password" ng-model="login.user.Password">
+                <input type="submit" class="button" value="Login">
+            </form>
     </div>
-  </body>
+
+    <div ng-controller="mainController as main" ng-if="master.user">
+        <h1>Welcome {{main.user.Firstname}} {{main.user.Lastname}}</h1>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-route.js"></script>
+    <!-- build:js app.min.js -->
+    <script type="text/javascript" src="javascripts/app.js"></script>
+    <script type="text/javascript" src="javascripts/login/loginController.js"></script>
+    <script type="text/javascript" src="javascripts/login/userService.js"></script>
+    <script type="text/javascript" src="javascripts/main/mainController.js"></script>
+    <script type="text/javascript" src="javascripts/custom.js"></script>
+    
+    <!-- endbuild -->
+</body>
 </html>

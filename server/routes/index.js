@@ -20,9 +20,12 @@ router.get('/signup', indexctrl.showSignup);
 router.post('/signup', userctrl.createNewUser);
 
 /* Log out */
-router.get('/logout', indexctrl.logout);
+router.post('/logout', indexctrl.logout);
 
 /* Protected routes */
+/* Check login */
+router.get('/auth', indexctrl.IsUserLoggedIn);
+
 /* Profile */
 router.get('/profile', indexctrl.checkIfUserLoggedIn, indexctrl.showProfile);
 

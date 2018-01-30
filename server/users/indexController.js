@@ -3,11 +3,7 @@ var sessionctrl = require('../config/session')
 var debug = require('debug')('index_ctrl');
 /* Homepage */
 exports.showHome = function(req, res, next){
-    if (process.env.NODE_ENV == 'api_development') {
-        res.redirect('/api');
-        return;
-    }
-    res.redirect('/api');
+    res.render('index');
 }
 
 exports.showApi = function(req, res, next){
@@ -27,13 +23,22 @@ exports.UserLogin = function (req, res, next) {
     res.redirect('/login');
 }
 
+exports.IsUserLoggedIn = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        var authUser = req.session.passport.user;
+        delete  authUser['Password']; // remove password field
+        return res.status(200).json(authUser);
+    }
+    res.status(401).end();
+}
+
 exports.checkIfUserLoggedIn = function (req, res, next) {
     // bypass checking in development
     if (process.env.NODE_ENV == 'api_development') {
         next();
         return;
     }
-
+    debug(req.session);
     if (req.isAuthenticated()) {
         next();
         return;

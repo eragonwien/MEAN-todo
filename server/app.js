@@ -18,8 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// add strategy to passport
-require('./config/passport')(passport);
+
 
 app.set('trust proxy', 1) // trust first proxy
 var sessionConfig = require('./config/session')
@@ -28,16 +27,27 @@ app.use(cookieSession(sessionConfig.config));
 // Update a value in the cookie so that the set-cookie will be sent.
 // Only changes every minute so that it's not sent with every request.
 app.use(sessionConfig.extendCookie);
-
+// add strategy to passport
+require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(gzip());
+
+// enable CORS
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Method", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+// enalble body-parse
+app.use(bodyParser.json());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(gzip());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
