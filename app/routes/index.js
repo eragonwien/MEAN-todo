@@ -24,7 +24,7 @@ router.post('/logout', indexctrl.logout);
 
 /* Protected routes */
 /* Check login */
-router.get('/auth', indexctrl.IsUserLoggedIn);
+router.post('/auth', indexctrl.IsUserLoggedIn);
 
 /* Profile */
 router.get('/profile', indexctrl.checkIfUserLoggedIn, indexctrl.showProfile);
