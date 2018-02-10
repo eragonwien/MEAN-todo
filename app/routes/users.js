@@ -14,7 +14,7 @@ router.put('/:uid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, us
 router.delete('/:uid', indexcrtl.checkAdminOnly, userctrl.deleteUserById);
 
 /* Projects */
-router.get('/:uid/projects', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkAdminOnly, projectctrl.getAllProjectsByUserId);
+router.get('/:uid/projects', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, projectctrl.getAllProjectsByUserId);
 router.get('/:uid/projects/:pid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, projectctrl.getProjectByUserId);
 router.post('/:uid/projects', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, projectctrl.createNewProjectByUserId);
 router.put('/:uid/projects/:pid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, projectctrl.updateProjectById);

@@ -49,7 +49,7 @@ exports.deleteUserById = function (req, res, next) {
 
 exports.authenticateUser = function(passport) {
     return function(req, res, next) {
-        passport.authenticate('local-login', function (error, user, info) {
+        passport.authenticate('local-login', function (error, user, info) {            
             if (error) {
                 debug('error');
                 return next(err);

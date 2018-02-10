@@ -38,7 +38,6 @@ exports.checkIfUserLoggedIn = function (req, res, next) {
         next();
         return;
     }
-    debug(req.session);
     if (req.isAuthenticated()) {
         next();
         return;
@@ -52,6 +51,7 @@ exports.checkIfUserLoggedIn = function (req, res, next) {
     preventing one user accessing other user's profile
  */
 exports.checkUserAccess = function (req, res, next) {
+    debug('CHECK ACCESS');
     // bypass checking in api development
     if (process.env.NODE_ENV == 'api_development') {
         next();
@@ -64,6 +64,8 @@ exports.checkUserAccess = function (req, res, next) {
     }
 
     // check if user has the matched id
+    debug(req.session.passport.user.Uid);
+    debug(req.params.uid);
     if (req.session.passport.user.Uid == req.params.uid) {
         next();
         return;
