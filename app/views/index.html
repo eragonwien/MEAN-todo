@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="meantodo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>MeanTodo</title>
+</head>
+<body ng-controller="navController as nav">
+    <div ng-include="'javascripts/components/navigation/navView.html'"></div>
+    <ng-view></ng-view>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- BOOTSTRAP 4 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- ANGULAR JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+
+    <script type="text/javascript" src="javascripts/app.module.js"></script>
+    <script type="text/javascript" src="javascripts/app.routes.js"></script>
+    <script type="text/javascript" src="javascripts/components/navigation/navController.js"></script>
+    <script type="text/javascript" src="javascripts/components/login/loginController.js"></script>
+    <script type="text/javascript" src="javascripts/components/login/loginService.js"></script>
+    <script type="text/javascript" src="javascripts/components/main/mainController.js"></script>
+    <script type="text/javascript" src="javascripts/components/main/noteService.js"></script>
+</body>
+</html>
