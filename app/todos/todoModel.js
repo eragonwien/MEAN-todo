@@ -14,8 +14,18 @@ exports.getAllTodos = function(next) {
 
 exports.getAllTodosByProject = function(pid, next) {
     var cmd = 'SELECT Tid, Pid, Text, Status, Last_Update FROM Todo WHERE Pid=?;';
-    var params = [uid];
-	
+	var params = [pid];
+	pool.query(cmd, params, function(error, results, fields){
+		if (error) {
+			return next(error);
+		}
+		next(null, results);
+	});
+}
+
+exports.getAllTodosByUser = function(uid, next) {
+	var cmd = 'SELECT User.Uid, Todo.* FROM User INNER JOIN Project ON User.Uid = Project.Uid INNER JOIN Todo ON Project.Pid = Todo.Pid WHERE User.Uid=?;';
+	var params = [uid];
 	pool.query(cmd, params, function(error, results, fields){
 		if (error) {
 			return next(error);

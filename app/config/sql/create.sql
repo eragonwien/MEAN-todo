@@ -14,10 +14,9 @@ CREATE TABLE IF NOT EXISTS User(
 CREATE TABLE IF NOT EXISTS Project (
     Pid INT NOT NULL AUTO_INCREMENT,
     Uid INT NOT NULL,
-    Name VARCHAR(30) NOT NULL,
-    Target VARCHAR(255) NOT NULL,
+    Name VARCHAR(255) NOT NULL,
     Progress INT NOT NULL,
-    Status ENUM('None', 'Incomplete', 'Complete') NOT NULL,
+    Status ENUM('Initial', 'Incomplete', 'Complete', 'Closed') NOT NULL,
     Last_Update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (Pid),
     FOREIGN KEY (Uid) REFERENCES User(Uid),
@@ -40,10 +39,10 @@ INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange@
 INSERT INTO User (Email, Password, Role, Firstname, Lastname) VALUES('drstrange2@marvel.com', '1234', 'Standard', 'Stephen', 'Strange');
 
 
-INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(1, 'Dr. Strange first act.', 'Reaching the sacred temple', 0, 'None');
-INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(1, 'Dr. Strange second act.', 'Becoming a sorcerer', 0, 'None');
-INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer', 0, 'None');
-INSERT INTO Project (Uid, Name, Target, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 'Becoming a 2nd sorcerer', 0, 'None');
+INSERT INTO Project (Uid, Name, Progress, Status) VALUES(1, 'Dr. Strange first act.', 0, 'Initial');
+INSERT INTO Project (Uid, Name, Progress, Status) VALUES(1, 'Dr. Strange second act.', 0, 'Initial');
+INSERT INTO Project (Uid, Name, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 0, 'Initial');
+INSERT INTO Project (Uid, Name, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 0, 'Initial');
 
 
 INSERT INTO Todo (Pid, Text) VALUES(1, 'Being a good doctor');

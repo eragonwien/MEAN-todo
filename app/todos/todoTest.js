@@ -13,6 +13,7 @@ var todo = require('./todoModel');
 describe('Todo Model Test', function () {
     var today = new Date();
     var newTodo = {
+        Uid: 1,
         Tid: null,
         Pid: 1,
         Text: 'created on ' + today.getDay + '.' + today.getMonth + '.' + today.getFullYear + ' at ' + today.getHours + '.' + today.getMinutes,
@@ -40,7 +41,25 @@ describe('Todo Model Test', function () {
             expect(result).to.have.property('Status').which.is.equal(newTodo.Status);
             done();
         })
-    });    
+    });  
+    it('should list all todos of Project 1', function (done) {
+        todo.getAllTodosByProject(newTodo.Pid, function (error, result) {
+            if (error) {
+                return done(error);
+            }
+            expect(result).to.be.an('array').which.has.length.greaterThan(0);
+            done();
+        })
+    });  
+    it('should list all todos of Project 1', function (done) {
+        todo.getAllTodosByUser(newTodo.Uid, function (error, result) {
+            if (error) {
+                return done(error);
+            }
+            expect(result).to.be.an('array').which.has.length.greaterThan(0);
+            done();
+        })
+    });       
     newTodo.Status = 'Complete';
     it('should update the newly added todo of User 1', function (done) {
         todo.updateTodoByTid(newTodo.Tid, newTodo, function (error, result) {
@@ -85,9 +104,21 @@ describe('Todo CRUD Test', function () {
         Text: 'created on ' + today.getDay() + '.' + today.getMonth() + '.' + today.getFullYear() + ' at ' + today.getHours() + '.' + today.getMinutes(),
         Status: 'Incomplete'
     }
-    it('should find all projects per GET api/todos', function (done) {
+    it('should find all todos per GET api/todos', function (done) {
         chai.request(server)
             .get('/api/todos')
+            .end(function (error, result) {
+                if (error) {
+                    return done(error);
+                }
+                expect(result).to.have.status(200);
+                expect(result.body).to.be.an('array');
+                done();
+            })
+    });
+    it('should find all todos of user 1per GET api/users/1/todos', function (done) {
+        chai.request(server)
+            .get('/api/users/' + newTodo.Uid + '/todos')
             .end(function (error, result) {
                 if (error) {
                     return done(error);

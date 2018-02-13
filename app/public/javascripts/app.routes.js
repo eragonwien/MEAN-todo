@@ -1,29 +1,32 @@
 angular
     .module('meantodo')
-    .config(route);
+    .config(state);
 
-route.$inject = ['$routeProvider'];
-function route(routeProvider) {
-    routeProvider
-    .when('/', {
+state.$inject = ['$stateProvider', '$urlRouterProvider']
+function state(stateProvider, urlRouterProvider) {
+
+    var mainState = {
+        name: 'main',
+        url: '/',
         templateUrl: 'javascripts/components/main/mainView.html',
         controller: 'mainController',
         controllerAs: 'main',
         resolve: {
             auth: authUser
         }
-    })
-    .when('/login', {
+    }
+
+    var loginState = {
+        name: 'login',
+        url: '/login',
         templateUrl: 'javascripts/components/login/loginView.html',
         controller: 'loginController',
         controllerAs: 'login'
-    })
-    .when('/error/404', {
-        templateUrl: 'javascripts/components/error/404View.html'
-    })
-    .otherwise({
-        redirectTo: '/error/404'
-    });
+    }
+    
+    stateProvider.state(mainState);
+    stateProvider.state(loginState);
+    urlRouterProvider.otherwise('/');    
 }
 
 

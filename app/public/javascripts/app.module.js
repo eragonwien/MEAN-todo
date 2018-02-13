@@ -1,1 +1,1 @@
-var app = angular.module('meantodo', ['ngStorage', 'ngRoute']);
+var app = angular.module('meantodo', ['ngStorage', 'ui.router']);

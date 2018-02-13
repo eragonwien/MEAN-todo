@@ -19,6 +19,15 @@ exports.getAllTodosByProject = function (req, res, next) {
     })
 }
 
+exports.getAllTodosByUser = function (req, res, next) {
+    todos.getAllTodosByUser(req.params.uid, function (error, results) {
+        if(error) {
+            return next(error);
+        }
+        res.status(200).json(results);
+    })
+}
+
 exports.getTodoById = function (req, res, next) {
     todos.getTodoById(req.params.tid, function (error, result) {
         if (error) {

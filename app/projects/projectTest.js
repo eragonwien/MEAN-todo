@@ -15,9 +15,8 @@ describe('Project Model Test', function () {
         Pid: null,
         Uid: 1,
         Name: 'test_' + new Date().getFullYear().toString(),
-        Target: 'Complete the Test',
         Progress: 0,
-        Status: 'None'
+        Status: 'Initial'
     }
     it('should add new task to User 1', function (done) {
         project.createNewProjectByUserId(newTask.Uid, newTask, function (error, result) {
@@ -40,7 +39,6 @@ describe('Project Model Test', function () {
             }
             expect(result).to.be.an('object');
             expect(result).to.have.property('Name').that.is.equal(newTask.Name);
-            expect(result).to.have.property('Target').that.is.equal(newTask.Target);
             expect(result).to.have.property('Progress').that.is.equal(newTask.Progress);
             expect(result).to.have.property('Status').that.is.equal(newTask.Status);
             done();
@@ -48,7 +46,6 @@ describe('Project Model Test', function () {
     });
     
     newTask.Progress = 60;
-    newTask.Target = 'Destroy World';
     it('should update the newly added task of User 1', function (done) {
         project.updateProjectById(newTask.Uid, newTask.Pid, newTask, function (error, result) {
             if (error) {
@@ -62,7 +59,6 @@ describe('Project Model Test', function () {
                 }
                 expect(result).to.be.an('object');
                 expect(result).to.have.property('Name').that.is.equal(newTask.Name);
-                expect(result).to.have.property('Target').that.is.equal(newTask.Target);
                 expect(result).to.have.property('Progress').that.is.equal(newTask.Progress);
                 expect(result).to.have.property('Status').that.is.equal(newTask.Status);
                 done();
@@ -93,9 +89,8 @@ describe('Project CRUD Test', function () {
         Pid: null,
         Uid: 1,
         Name: 'test_' + new Date().getFullYear().toString(),
-        Target: 'Complete the Test',
         Progress: 0,
-        Status: 'None'
+        Status: 'Initial'
     }
     it('should find all projects per GET api/projects', function (done) {
         chai.request(server)
@@ -137,7 +132,6 @@ describe('Project CRUD Test', function () {
                 expect(result.body).to.have.property('Uid').that.is.equal(newTask.Uid);
                 expect(result.body).to.have.property('Pid').that.is.equal(newTask.Pid);
                 expect(result.body).to.have.property('Name').that.is.equal(newTask.Name);
-                expect(result.body).to.have.property('Target').that.is.equal(newTask.Target);
                 expect(result.body).to.have.property('Progress').that.is.equal(newTask.Progress);
                 expect(result.body).to.have.property('Status').that.is.equal(newTask.Status);
                 done();
@@ -145,8 +139,6 @@ describe('Project CRUD Test', function () {
     });
     it('should update project per PUT api/users/:uid/projects/:pid', function (done) {
         newTask.Progress += 50;
-        newTask.Target = "updated Target";
-
         chai.request(server)
             .put('/api/users/' + newTask.Uid + '/projects/' + newTask.Pid)
             .send(newTask)
@@ -167,7 +159,6 @@ describe('Project CRUD Test', function () {
                         expect(result.body).to.have.property('Uid').that.is.equal(newTask.Uid);
                         expect(result.body).to.have.property('Pid').that.is.equal(newTask.Pid);            
                         expect(result.body).to.have.property('Name').that.is.equal(newTask.Name);
-                        expect(result.body).to.have.property('Target').that.is.equal(newTask.Target);
                         expect(result.body).to.have.property('Progress').that.is.equal(newTask.Progress);
                         expect(result.body).to.have.property('Status').that.is.equal(newTask.Status);
                         done();

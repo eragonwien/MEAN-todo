@@ -64,8 +64,6 @@ exports.checkUserAccess = function (req, res, next) {
     }
 
     // check if user has the matched id
-    debug(req.session.passport.user.Uid);
-    debug(req.params.uid);
     if (req.session.passport.user.Uid == req.params.uid) {
         next();
         return;

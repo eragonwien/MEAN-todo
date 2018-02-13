@@ -1,38 +1,75 @@
+<div class="alert {{main.messageClass}}" ng-show="main.message">{{main.message}}</div>    
 <div class="container">
-    <div class="row" ng-show="main.user">
-            <div class="col-12">
-                <h1 >Hello {{main.user.Firstname}}</h1>
-            </div>
+    <div class="row py-2">
+        <div class="col-12">
+            <h2>My Projects</h2>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <h2>Notes</h2>
+    </div>
+    <form name="createProjectForm" class="py-3">
+        <div class="form-row">
+            <div class="col">
+                <input type="text" name="Projectname" id="Projectname" ng-model="main.newProject.name"
+                    class="form-control" placeholder="Name of new project..." required>
             </div>
+            <button type="submit" class="btn btn-primary"
+                ng-click="main.createNewProject(main.newProject)" ng-disabled="createProjectForm.$invalid">
+                <i class="fas fa-plus-circle"></i>
+            </button>
+            
         </div>
-        <div class="row" ng-show="main.empty">
-            <div class="col-12" ng-hide="main.creatingNote">
-                <p>It's empty here.</p>
-                <p>
-                    <button class="btn btn-primary"
-                        ng-click="main.creatingNote = true">
-                        <i class="fas fa-plus"></i> Add
-                    </button>
-                    <span> new notes here...</span>
-                </p>
-            </div>   
-            <div class="col-12" ng-show="main.creatingNote">
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label for="name">Name: </label>
-                        <input type="text" name="name" id="name" ng-model="main.newNote.name">
+    </form>
+    <div class="row">
+        <div class="col-12" ng-hide="main.empty">
+            <div class="row border py-3" ng-repeat="project in main.projects">
+                <div class="col-6">{{project.Name}}</div>
+                <div class="col-3">
+                    <div class="progress">
+                        <div class="progress-bar bg-success" ng-style="{'width': project.Progress + '%'}">{{project.Progress}}%</div>
                     </div>
                 </div>
-                <button class="btn btn-primary" ng-click="main.creatingNote = false"><i class="fas fa-plus"></i> Add</button>
+                <div class="col-3">
+                    <button class="btn btn-success btn-sm" ng-click="editingProject = true" ng-hide="editingProject">
+                            <i class="fas fa-angle-down"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" ng-click="editingProject = false" ng-show="editingProject">
+                            <i class="fas fa-angle-up"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" ng-click="main.deleteProject(project)" ng-show="editingProject">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>                    
+                </div>
+                <div class="col-12" ng-show="editingProject">
+                    <form name="editProjectForm">
+                        <div class="form-row py-2">
+                            <div class="col">
+                                <input type="text" name="todoText" id="todoText" class="form-control" placeholder="Write text here..." 
+                                    ng-model="project.newTodo.Text" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm"
+                                ng-click="main.createTodo(project, project.newTodo)" ng-disabled="editProjectForm.$invalid">
+                                <i class="fas fa-plus-circle"></i> New
+                            </button>                            
+                        </div>
+                    </form>
+                    <div class="row border py-2" ng-repeat="todo in project.todos">
+                        <div class="col" ng-disabled="todo.Status == 'Complete'">
+                            {{todo.Text}}
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-success btn-sm" ng-click="editingTodo = true" ng-hide="editingTodo">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm" ng-click="editingTodo = false" ng-show="editingTodo">
+                                <i class="fas fa-undo-alt"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" ng-click="main.deleteTodo(project, todo)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
-        <div class="row">
-            <div class="col-12" ng-hide="main.empty">
-                <pre>{{main.notes}}</pre>
-            </div>
-        </div>
+    </div>
 </div>

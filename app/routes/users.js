@@ -23,6 +23,7 @@ router.delete('/:uid/projects/:pid', indexcrtl.checkIfUserLoggedIn, indexcrtl.ch
 /* Todos */
 router.get('/:uid/projects/:pid/todos', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.getAllTodosByProject);
 router.get('/:uid/projects/:pid/todos/:tid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.getTodoById);
+router.get('/:uid/todos/', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.getAllTodosByUser);
 router.post('/:uid/projects/:pid/todos', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.createNewTodo);
 router.put('/:uid/projects/:pid/todos/:tid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.updateTodoById);
 router.delete('/:uid/projects/:pid/todos/:tid', indexcrtl.checkIfUserLoggedIn, indexcrtl.checkUserAccess, todoctrl.deleteTodoById);

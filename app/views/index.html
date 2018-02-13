@@ -9,7 +9,8 @@
 </head>
 <body ng-controller="navController as nav">
     <div ng-include="'javascripts/components/navigation/navView.html'"></div>
-    <ng-view></ng-view>
+    <ui-view></ui-view>
+
 
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <!-- BOOTSTRAP 4 -->
@@ -18,8 +19,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <!-- ANGULAR JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>    
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-resource.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-route.js"></script>
+    <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
 
     <script type="text/javascript" src="javascripts/app.module.js"></script>
@@ -28,6 +28,7 @@
     <script type="text/javascript" src="javascripts/components/login/loginController.js"></script>
     <script type="text/javascript" src="javascripts/components/login/loginService.js"></script>
     <script type="text/javascript" src="javascripts/components/main/mainController.js"></script>
-    <script type="text/javascript" src="javascripts/components/main/noteService.js"></script>
+    <script type="text/javascript" src="javascripts/components/main/projectService.js"></script>
+    <script type="text/javascript" src="javascripts/components/main/todoService.js"></script>
 </body>
 </html>
