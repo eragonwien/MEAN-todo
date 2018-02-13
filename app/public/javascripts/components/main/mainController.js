@@ -26,6 +26,7 @@ function mainController(sc, loginService, projectService, todoService) {
                 vm.empty = true;
             } 
             else {
+                vm.empty = false
                 vm.projects = projects;
             }
             // get todos of each project

@@ -1,4 +1,4 @@
-DROP TABLE Todo, Project, User;
+DROP TABLE IF EXISTS Todo, Project, User;
 
 CREATE TABLE IF NOT EXISTS User(
     Uid INT AUTO_INCREMENT,
@@ -45,25 +45,10 @@ INSERT INTO Project (Uid, Name, Progress, Status) VALUES(2, 'Dr. Strange 2 secon
 INSERT INTO Project (Uid, Name, Progress, Status) VALUES(2, 'Dr. Strange 2 second act.', 0, 'Initial');
 
 
-INSERT INTO Todo (Pid, Text) VALUES(1, 'Being a good doctor');
-INSERT INTO Todo (Pid, Text) VALUES(1, 'Getting into a car accident');
-INSERT INTO Todo (Pid, Text) VALUES(1, 'Finding people who can fix broken hands');
-INSERT INTO Todo (Pid, Text) VALUES(1, 'Find the sacred temple');
-
-INSERT INTO Todo (Pid, Text) VALUES(2, 'Talking with the elder');
-INSERT INTO Todo (Pid, Text) VALUES(2, 'Learning to teleport');
-INSERT INTO Todo (Pid, Text) VALUES(2, 'Reading books');
-INSERT INTO Todo (Pid, Text) VALUES(2, 'Mastering the sacred weapons');
-
-INSERT INTO Todo (Pid, Text) VALUES(3, '2 Being a good doctor');
-INSERT INTO Todo (Pid, Text) VALUES(3, '2 Getting into a car accident');
-INSERT INTO Todo (Pid, Text) VALUES(3, '2 Finding people who can fix broken hands');
-INSERT INTO Todo (Pid, Text) VALUES(3, '2 Find the sacred temple');
-
-INSERT INTO Todo (Pid, Text) VALUES(4, '2 Talking with the elder');
-INSERT INTO Todo (Pid, Text) VALUES(4, '2 Learning to teleport');
-INSERT INTO Todo (Pid, Text) VALUES(4, '2 Reading books');
-INSERT INTO Todo (Pid, Text) VALUES(4, '2 Mastering the sacred weapons');
+INSERT INTO Todo (Pid, Text, Status) VALUES(1, 'Being a good doctor', 'Incomplete');
+INSERT INTO Todo (Pid, Text, Status) VALUES(1, 'Getting into a car accident', 'Incomplete');
+INSERT INTO Todo (Pid, Text, Status) VALUES(1, 'Finding people who can fix broken hands', 'Incomplete');
+INSERT INTO Todo (Pid, Text, Status) VALUES(1, 'Find the sacred temple', 'Incomplete');
 
 SELECT Todo.Tid, User.email, Project.Name, Todo.Text, Todo.Status
 FROM Todo
