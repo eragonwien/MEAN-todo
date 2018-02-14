@@ -6,69 +6,97 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12" ng-hide="main.empty">
+        <div class="col-12">
             <ul class="list-group">
                 <li class="list-group-item list-group-item-primary">
-                    <form name="createProjectForm" class="py-3">
+                    <form name="createProjectForm" class="py-2">
                         <div class="form-row">
                             <div class="col">
                                 <input type="text" name="Projectname" id="Projectname" ng-model="main.newProject.name"
                                     class="form-control" placeholder="Name of new project..." required>
                             </div>
-                            <button type="submit" class="btn btn-primary"
+                            <button type="submit" class="btn btn-primary mx-1"
                                 ng-click="main.createNewProject(main.newProject)" ng-disabled="createProjectForm.$invalid">
-                                <i class="fas fa-plus-circle"></i>
+                                <i class="fas fa-plus"></i>
                             </button>
-                            
                         </div>
                     </form>
                 </li>
-                <li class="list-group-item" ng-repeat="project in main.projects">
-                    {{project.Name}}
-                    <div class="progress">
-                        <div class="progress-bar bg-success" ng-style="{'width': project.Progress + '%'}">{{project.Progress}}%</div>
-                    </div>
-                    <button class="btn btn-success btn-sm" ng-click="editingProject = true" ng-hide="editingProject">
-                        <i class="fas fa-angle-down"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" ng-click="editingProject = false" ng-show="editingProject">
-                        <i class="fas fa-angle-up"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" ng-click="main.deleteProject(project)" ng-show="editingProject">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>  
-                    <!-- Todos -->
-                    <ul class="list-group" ng-show="editingProject">
-                        <li class="list-group-item list-group-item-info">
-                            <form name="editProjectForm">
-                                <div class="form-row py-2">
-                                    <div class="col">
-                                        <input type="text" name="todoText" id="todoText" class="form-control" placeholder="Write text here..." 
-                                            ng-model="project.newTodo.Text" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm"
-                                        ng-click="main.createTodo(project, project.newTodo)" ng-disabled="editProjectForm.$invalid">
-                                        <i class="fas fa-plus-circle"></i> New
-                                    </button>                            
-                                </div>
-                            </form>
-                        </li>
-                        <li class="list-group-item list-group-item-info" ng-repeat="todo in project.todos">
-                            <div class="col" ng-disabled="todo.Status == 'Complete'">
-                                {{todo.Text}}
+                <li class="list-group-item bg-light" ng-repeat="project in main.projects" ng-cloak>
+                    <div class="row">
+                        <div class="col-8"><strong>{{project.Name}}</strong></div>
+                        <div class="col-4">
+                            <div class="progress">
+                                <div class="progress-bar bg-success text-dark" ng-style="{'width': project.Progress + '%'}"></div>
                             </div>
-                            <button class="btn btn-success btn-sm" ng-click="editingTodo = true" ng-hide="editingTodo">
-                                <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-success btn-sm mx-1" 
+                                ng-click="editingProject = true" ng-hide="editingProject" type="button" data-toggle="collapse" data-target="#project_{{project.Pid}}">
+                                <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button class="btn btn-primary btn-sm" ng-click="editingTodo = false" ng-show="editingTodo">
-                                <i class="fas fa-undo-alt"></i>
+                            <button class="btn btn-danger btn-sm mx-1" type="button" data-toggle="collapse" data-target="#project_{{project.Pid}}"
+                                ng-click="editingProject = false" ng-show="editingProject">
+                                <i class="fas fa-times"></i> Close
                             </button>
-                            <button class="btn btn-danger btn-sm" ng-click="main.deleteTodo(project, todo)">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </li>
-
-                    </ul>
+                            <button class="btn btn-danger btn-sm mx-1" ng-click="main.deleteProject(project)" ng-show="editingProject">
+                                <i class="fas fa-trash-alt"></i> Remove
+                            </button>  
+                        </div>
+                    </div>
+                    
+                    <!-- Todos -->
+                    <div class="collapse" id="project_{{project.Pid}}">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-info">
+                                <form name="editProjectForm">
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <input type="text" name="todoText" id="todoText" class="form-control" placeholder="new todo here..." 
+                                                ng-model="project.newTodo.Text" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-1"
+                                            ng-click="main.createTodo(project, project.newTodo)" ng-disabled="editProjectForm.$invalid">
+                                            <i class="fas fa-plus"></i> New
+                                        </button>                            
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="list-group-item list-group-item-info" ng-repeat="todo in project.todos">
+                                <div class="row">
+                                    <div class="col pb-2" 
+                                        ng-if="todo.Status != 'Complete'">
+                                        <a style="text-decoration: none; cursor: pointer;"
+                                            ng-click="main.checkTodo(todo)"> 
+                                            {{todo.Text}}
+                                        </a>
+                                    </div>
+                                    <div class="col pb-2" 
+                                        ng-if="todo.Status == 'Complete'">
+                                        <del><a style="text-decoration: none; cursor: pointer;"
+                                            ng-click="main.uncheckTodo(todo)">
+                                            {{todo.Text}}
+                                        </a></del>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-end">
+                                        <button class="btn btn-success btn-sm mx-1" ng-click="main.checkTodo(todo)" ng-hide="todo.Status == 'Complete'">
+                                            <i class="fas fa-check"></i> Check
+                                        </button>
+                                        <button class="btn btn-primary btn-sm mx-1" ng-click="main.uncheckTodo(todo)" ng-show="todo.Status == 'Complete'">
+                                            <i class="fas fa-undo-alt"></i> Uncheck
+                                        </button>
+                                        <button class="btn btn-danger btn-sm mx-1" ng-click="main.deleteTodo(project, todo)">
+                                            <i class="fas fa-trash-alt"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>

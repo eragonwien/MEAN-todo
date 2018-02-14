@@ -5,14 +5,14 @@ angular
 mainController.$inject = ['$scope', 'loginService', 'projectService', 'todoService'];
 function mainController(sc, loginService, projectService, todoService) {
     var vm = this;
-    vm.empty = false;
     vm.user = loginService.getLocalUser();
     vm.getAllProjects = getAllProjects;
     vm.createNewProject = createNewProject;
     vm.deleteProject = deleteProject;
     vm.createTodo = createTodo;
     vm.deleteTodo = deleteTodo;
-    vm.updateTodo = updateTodo;
+    vm.checkTodo = checkTodo;
+    vm.uncheckTodo = uncheckTodo;
 
     getAllProjects();
 
@@ -20,17 +20,11 @@ function mainController(sc, loginService, projectService, todoService) {
         return projectService.getAllProjectsByUid(vm.user.Uid).then(getAllProjectsHandler);
 
         function getAllProjectsHandler(response) {
-            // if result is empty, display add button
             var projects = response.data;
+            vm.projects = projects;
             if (projects.length == 0) {
-                vm.empty = true;
+                return;
             } 
-            else {
-                vm.empty = false
-                vm.projects = projects;
-            }
-            // get todos of each project
-            //projects.map(getTodos);
             getTodos(vm.user.Uid);
 
             function getTodos(uid) {
@@ -62,6 +56,7 @@ function mainController(sc, loginService, projectService, todoService) {
             // refresh list of project
             setAlert('Project created.', true);
             getAllProjects();
+            vm.newProject = {};
         }
     }
 
@@ -82,6 +77,7 @@ function mainController(sc, loginService, projectService, todoService) {
             // refresh list of project
             setAlert('Todo added to ' + project.Name, true);
             getAllProjects();
+            
         }
     }
 
@@ -94,8 +90,23 @@ function mainController(sc, loginService, projectService, todoService) {
         }
     }
 
-    function updateTodo(project, todo) {
-        
+    function checkTodo(todo) {
+        todo.Status = 'Complete';
+        updateTodo(todo);
+    }
+
+    function uncheckTodo(todo) {
+        todo.Status = 'Incomplete';
+        updateTodo(todo);
+    }
+
+    function updateTodo(todo) {
+        todoService.updateTodo(todo).then(updateTodoHandler);
+
+        function updateTodoHandler(response) {
+            setAlert('Todo Nr.' + todo.Tid + ' is updated.', true);
+            getAllProjects();
+        }
     }
 
     function setAlert(content, isSuccess) {

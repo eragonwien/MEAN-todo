@@ -1,6 +1,6 @@
 var pool = require('../connection/connect').pool;
-var debug = require('debug')('todo-model');
-
+var debug = require('debug')('todo_model');
+var projectModel = require('../projects/projectModel');
 exports.getAllTodos = function(next) {
     var cmd = 'SELECT * FROM Todo;';
 
@@ -12,7 +12,7 @@ exports.getAllTodos = function(next) {
 	});
 }
 
-exports.getAllTodosByProject = function(pid, next) {
+function getAllTodosByProject(pid, next) {
     var cmd = 'SELECT Tid, Pid, Text, Status, Last_Update FROM Todo WHERE Pid=?;';
 	var params = [pid];
 	pool.query(cmd, params, function(error, results, fields){
@@ -22,7 +22,7 @@ exports.getAllTodosByProject = function(pid, next) {
 		next(null, results);
 	});
 }
-
+exports.getAllTodosByProject = getAllTodosByProject;
 exports.getAllTodosByUser = function(uid, next) {
 	var cmd = 'SELECT User.Uid, Todo.* FROM User INNER JOIN Project ON User.Uid = Project.Uid INNER JOIN Todo ON Project.Pid = Todo.Pid WHERE User.Uid=?;';
 	var params = [uid];
@@ -54,7 +54,7 @@ exports.createNewTodo = function(todo, next) {
 		if (error) {
 			return next(error);
 		}
-		next(null, result);
+		changeProgressOfProject(todo.Uid, todo.Pid, next);
 	});
 }
 
@@ -66,8 +66,28 @@ exports.updateTodoByTid = function(tid, updatedTodo, next) {
 		if (error) {
 			return next(error);
 		}
-		next(null, result);
+		// re-count the status of all todos then update the parent project
+		changeProgressOfProject(updatedTodo.Uid, updatedTodo.Pid, next);
 	});
+}
+
+function changeProgressOfProject(uid, pid, next) {
+	var cmd = 'SELECT (SUM(Todo.Status = ?) / COUNT(*)) * 100 AS progress FROM Todo WHERE Todo.Pid=?;';
+	var params = ['Complete', pid];
+	pool.query(cmd, params, function (error, results) {
+		if (error) {
+			return next(error);
+		}
+		debug(results);
+		var progress = results[0].progress;
+		projectModel.getProjectById(uid, pid, function (error, project) {
+			if (error) {
+				return next(error);
+			}
+			project.Progress = progress;
+			projectModel.updateProjectById(uid, pid, project, next);
+		})
+	})
 }
 
 exports.deleteTodoById = function(tid, next) {

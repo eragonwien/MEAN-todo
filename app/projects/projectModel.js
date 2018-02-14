@@ -74,3 +74,4 @@ exports.deleteProjectById = function(uid, pid, next) {
 		});
 	})
 }
+

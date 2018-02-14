@@ -32,6 +32,7 @@ function todoService(http) {
             method: 'POST',
             url: '/api/users/' + project.Uid + '/projects/' + project.Pid + '/todos',
             data: {
+                Uid: project.Uid,
                 Pid: project.Pid,
                 Text: todo.Text,
                 Status: 'Incomplete'
@@ -62,10 +63,17 @@ function todoService(http) {
         }
     }
 
-    function updateTodo(project, todo) {
+    function updateTodo(todo) {
         return http({
             method: 'PUT',
-            url: '/api/users/' + project.Uid + '/projects/' + project.Pid + '/todos/' + todo.Tid
+            url: '/api/users/' + todo.Uid + '/projects/' + todo.Pid + '/todos/' + todo.Tid,
+            data: {
+                Uid: todo.Uid,
+                Pid: todo.Pid,
+                Tid: todo.Tid,
+                Text: todo.Text,
+                Status: todo.Status
+            }
         }).then(updateTodoSuccess, updateTodoError);
 
         function updateTodoSuccess(response) {
