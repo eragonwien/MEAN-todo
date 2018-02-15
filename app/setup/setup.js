@@ -21,7 +21,7 @@ function createEnvFile() {
 
 function addEnvLine(question, env_key, next) {
     rl.question(question, function (value) {
-        var line = env_key + '=' + value;
+        var line = env_key + '=' + value + '\n';
         fs.appendFile(envFile, line, function (error) {
             if (error) {
                 return next(error);

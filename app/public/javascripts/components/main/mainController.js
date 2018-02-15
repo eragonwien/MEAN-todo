@@ -55,6 +55,7 @@ function mainController(sc, loginService, projectService, todoService) {
         function createNewProjectHandler(response) {
             // refresh list of project
             setAlert('Project created.', true);
+            vm.newProject = {};
             getAllProjects();
         }
     }
