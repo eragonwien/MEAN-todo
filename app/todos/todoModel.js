@@ -54,7 +54,7 @@ exports.createNewTodo = function(todo, next) {
 		if (error) {
 			return next(error);
 		}
-		changeProgressOfProject(todo.Uid, todo.Pid, next);
+		next(null, result)
 	});
 }
 

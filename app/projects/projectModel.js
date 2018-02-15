@@ -1,5 +1,5 @@
 var pool = require('../connection/connect').pool;
-var debug = require('debug')('project-model');
+var debug = require('debug')('project_model');
 
 exports.getAllProjects = function(next) {
     var cmd = 'SELECT Pid, Uid, Name, Progress, Status, Last_Update FROM Project;';
@@ -53,6 +53,8 @@ exports.updateProjectById = function(uid, pid, project, next) {
 		if (error) {
 			return next(error);
 		}
+		// attach progress to results
+		results.projectProgress = project.Progress;
 		next(null, results);
 	});
 }

@@ -12,7 +12,16 @@ exports.pool = mysql.createPool({
   multipleStatements: true
 });
 
-exports.closePool = function(pool) {
+exports.pool_no_db = mysql.createPool({
+  host     : db.DB_HOST,
+  user     : db.DB_USER,
+  password : db.DB_PASSWORD,
+  connectionLimit: db.DB_POOL_LIMIT,
+  //debug: (process.env.NODE_ENV === 'development'), 
+  multipleStatements: true
+});
+
+exports.close = function(pool) {
 	pool.end(function(){
 		//console.log('Pool closed');
 	});

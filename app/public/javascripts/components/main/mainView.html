@@ -24,24 +24,21 @@
                 </li>
                 <li class="list-group-item bg-light" ng-repeat="project in main.projects" ng-cloak>
                     <div class="row">
-                        <div class="col-8"><strong>{{project.Name}}</strong></div>
+                        <div class="col-8 d-flex">
+                            <a href="#project_{{project.Pid}}" class="mr-auto" 
+                                data-toggle="collapse" role="button" aria-expanded="false" aria-controls="project_{{project.Pid}}">
+                                <strong>{{project.Name}}</strong>
+                            </a>
+                        </div>
                         <div class="col-4">
                             <div class="progress">
                                 <div class="progress-bar bg-success text-dark" ng-style="{'width': project.Progress + '%'}"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="row py-2">
-                        <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-success btn-sm mx-1" 
-                                ng-click="editingProject = true" ng-hide="editingProject" type="button" data-toggle="collapse" data-target="#project_{{project.Pid}}">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger btn-sm mx-1" type="button" data-toggle="collapse" data-target="#project_{{project.Pid}}"
-                                ng-click="editingProject = false" ng-show="editingProject">
-                                <i class="fas fa-times"></i> Close
-                            </button>
-                            <button class="btn btn-danger btn-sm mx-1" ng-click="main.deleteProject(project)" ng-show="editingProject">
+                    <div class="row pb-2">
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-danger btn-sm ml-auto" ng-click="main.deleteProject(project)">
                                 <i class="fas fa-trash-alt"></i> Remove
                             </button>  
                         </div>
@@ -66,31 +63,23 @@
                             </li>
                             <li class="list-group-item list-group-item-info" ng-repeat="todo in project.todos">
                                 <div class="row">
-                                    <div class="col pb-2" 
+                                    <div class="col-9 pb-2" 
                                         ng-if="todo.Status != 'Complete'">
                                         <a style="text-decoration: none; cursor: pointer;"
                                             ng-click="main.checkTodo(todo)"> 
                                             {{todo.Text}}
                                         </a>
                                     </div>
-                                    <div class="col pb-2" 
+                                    <div class="col-9 pb-2" 
                                         ng-if="todo.Status == 'Complete'">
                                         <del><a style="text-decoration: none; cursor: pointer;"
                                             ng-click="main.uncheckTodo(todo)">
                                             {{todo.Text}}
                                         </a></del>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col d-flex justify-content-end">
-                                        <button class="btn btn-success btn-sm mx-1" ng-click="main.checkTodo(todo)" ng-hide="todo.Status == 'Complete'">
-                                            <i class="fas fa-check"></i> Check
-                                        </button>
-                                        <button class="btn btn-primary btn-sm mx-1" ng-click="main.uncheckTodo(todo)" ng-show="todo.Status == 'Complete'">
-                                            <i class="fas fa-undo-alt"></i> Uncheck
-                                        </button>
-                                        <button class="btn btn-danger btn-sm mx-1" ng-click="main.deleteTodo(project, todo)">
-                                            <i class="fas fa-trash-alt"></i> Remove
+                                    <div class="col-3 d-flex">
+                                        <button class="btn btn-danger btn-sm ml-auto" ng-click="main.deleteTodo(project, todo)">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
                                 </div>

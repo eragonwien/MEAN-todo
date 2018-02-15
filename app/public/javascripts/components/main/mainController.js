@@ -56,7 +56,6 @@ function mainController(sc, loginService, projectService, todoService) {
             // refresh list of project
             setAlert('Project created.', true);
             getAllProjects();
-            vm.newProject = {};
         }
     }
 
@@ -66,7 +65,8 @@ function mainController(sc, loginService, projectService, todoService) {
         function deleteProjectHandler(response) {
             // refresh list of project
             setAlert('Project deleted.', true);
-            getAllProjects();
+            var index = vm.projects.indexOf(project);
+            vm.projects.splice(index, 1);
         }
     }
 
@@ -75,9 +75,11 @@ function mainController(sc, loginService, projectService, todoService) {
 
         function createTodoHandler(response) {
             // refresh list of project
-            setAlert('Todo added to ' + project.Name, true);
-            getAllProjects();
-            
+            //setAlert('Todo added to ' + project.Name, true);
+            todo = angular.copy(response.config.data);
+            todo.Tid = response.data.insertId;
+            project.todos.push(todo);            
+            project.newTodo = {};
         }
     }
 
@@ -86,7 +88,8 @@ function mainController(sc, loginService, projectService, todoService) {
 
         function deleteTodoHandler(response) {
             setAlert('Todo deleted.', true);
-            getAllProjects();
+            var index = project.todos.indexOf(todo);
+            project.todos.splice(index, 1);
         }
     }
 
@@ -104,8 +107,15 @@ function mainController(sc, loginService, projectService, todoService) {
         todoService.updateTodo(todo).then(updateTodoHandler);
 
         function updateTodoHandler(response) {
-            setAlert('Todo Nr.' + todo.Tid + ' is updated.', true);
-            getAllProjects();
+            //setAlert('Todo Nr.' + todo.Tid + ' is updated.', true);
+            var progress = response.data.projectProgress;
+            vm.projects.forEach(updateProgress);
+
+            function updateProgress(value, index) {
+                if(value.Pid == todo.Pid) {
+                    value.Progress = progress;
+                }
+            }
         }
     }
 

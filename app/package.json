@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "setup": "node ./setup/setup.js",
     "start": "node ./bin/www",
     "test": "mocha test/test.js -bail",
     "connection_test": "mocha connection/connectionTest.js"
