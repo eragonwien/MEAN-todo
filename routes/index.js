@@ -2,7 +2,6 @@
 
 var express = require('express');
 var router = express.Router();
-
 var indexctrl = require('../users/indexController');
 var userctrl = require('../users/userController');
 var sessionctrl = require('../config/session')

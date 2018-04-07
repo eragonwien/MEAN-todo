@@ -1,97 +1,107 @@
-/**
- * check if database exist
- *      if not, create new, go to yes
- *      if yes, read .sql file and create tables
- */
-var env = require('dotenv').config();
-var fs = require('fs');
+require('dotenv').config();
+let fs = require('fs');
+let readline = require('readline-sync');
+const ENV_PATH = '.env';
 
+let Helper = require('./helper');
+let helper = new Helper();
 
-/* CREATE .ENV */
-var readline = require('readline');
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-var envFile = '.env';
-
-function createEnvFile() {
-    addNodeEnv();
-}
-
-function addEnvLine(question, env_key, next) {
-    rl.question(question, function (value) {
-        var line = env_key + '=' + value + '\n';
-        fs.appendFile(envFile, line, function (error) {
-            if (error) {
-                return next(error);
-            }
-            next();
-        })
-    })
-}
-
-function addNodeEnv(error) {
-    if (error) {
-        console.log(error);
+start();
+function start() {
+    if (!fs.existsSync(ENV_PATH)) {
+        console.log('no .env found. Attemp on creating new.');
+        createEnv();
         return;
     }
-    addEnvLine('Node environtment ?', 'NODE_ENV', addHost);
+    console.log('.env exists');
+    setupDB();
 }
 
-function addHost(error) {
+function finish(error) {
     if (error) {
-        console.log(error);
-        return;
+        return console.log(error);
     }
-    addEnvLine('SQL host ?', 'DB_HOST', addUsername);
+    console.log('Setup finished successfully.');
+    process.exit();
 }
 
-function addUsername(error) {
+
+function createEnv() {
+    console.log('creating .env');
+    let env = "";
+    // node environment
+    let nodeEnv = readline.question('Node environment ? default: development', {defaultInput: 'development'});
+    let host = readline.question('Database host ? default: localhost', {defaultInput: 'localhost'});
+    let user = readline.question('Database Username ?');
+    let password = readline.question('Database Password ?', {hideEchoBack: true});
+    let devDB = readline.question('Name of development database ?');
+    let prodDB = readline.question('Name of production database ?');
+    let poolLimit = readline.questionInt('Pool limit ? default: 100', {defaultInput: 100});
+
+    env = helper.addKeyValueLine(env, 'NODE_ENV', nodeEnv);
+    env = helper.addKeyValueLine(env, 'DB_HOST', host);
+    env = helper.addKeyValueLine(env, 'DB_USER', user);
+    env = helper.addKeyValueLine(env, 'DB_PASSWORD', password);
+    env = helper.addKeyValueLine(env, 'DB_TEST', devDB);
+    env = helper.addKeyValueLine(env, 'DB_PRODUCTION', prodDB);
+    env = helper.addKeyValueLine(env, 'DB_POOL_LIMIT', poolLimit);
+    
+    console.log(env);
+    if (!readline.keyInYN('Do you want to save this as .env ?')) {
+        return console.log('creating .env aborted. Reason: canceled by user.');
+    }
+    fs.writeFile(ENV_PATH, env, function (error) {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('.env created successfully');
+        setupDB();
+    });
+}
+
+
+
+//setup();
+
+function setupDB() {
+    require('dotenv').config();
+    if (!process.env.NODE_ENV) {
+        return console.log('Environment variables not found. Try rerun the setup.');
+    }
+    setupDev(setupProduction);
+}
+
+// DEV setup
+function setupDev(next) {
+    console.log('Setting up development database');
+    
+}
+
+function setupProduction(error) {
     if (error) {
-        console.log(error);
-        return;
+        return console.log(error);
     }
-    addEnvLine('SQL username ?', 'DB_USER', addPassword);    
+    console.log('Setting up production database');  
+    finish(); 
 }
 
-function addPassword(error) {
+function createDB(error, done) {
     if (error) {
-        console.log(error);
-        return;
+        return done(error);
     }
-    addEnvLine('SQL password ?', 'DB_PASSWORD', addTestDB);    
+    let pool = require('../config/connect').pool_no_db;
+    pool.query()
 }
 
-function addTestDB(error) {
-    if (error) {
-        console.log(error);
-        return;
-    }
-    addEnvLine('SQL database name for testing ?', 'DB_NAME_TEST', addProductionDB);    
-}
 
-function addProductionDB(error) {
-    if (error) {
-        console.log(error);
-        return;
-    }
-    addEnvLine('SQL database for production ?', 'DB_NAME_PRODUCTION', setup);    
-}
-
-setup();
-
-function setup() {
-    checkIfEnvFileExists();
-}
 
 /* SET UP */
-var db = require('../connection/connect');
-var database = (process.env.NODE_ENV == 'production') ? process.env.DB_NAME_PRODUCTION : process.env.DB_NAME_TEST;
-var tables = ['User', 'Project', 'Todo'];
-var pool_no_db = db.pool_no_db;
-var pool = db.pool;
-var path_to_create_sql = 'config/sql/create.sql';
+let db = require('../connection/connect');
+let database = (process.env.NODE_ENV == 'production') ? process.env.DB_NAME_PRODUCTION : process.env.DB_NAME_TEST;
+let tables = ['User', 'Project', 'Todo'];
+let pool_no_db = db.pool_no_db;
+let pool = db.pool;
+let path_to_create_sql = 'config/sql/create.sql';
 
 function checkIfEnvFileExists() {
     console.log('Check if' + envFile + 'exists');
@@ -110,7 +120,7 @@ function checkDatabaseExist(database) {
     if (!database) {
         return finishSetup('database name not found.');
     }
-    var cmd = 'USE ' + database;
+    let cmd = 'USE ' + database;
     pool_no_db.query(cmd, null, function (error, result) {
         if (error) {
             // database does not exists
@@ -124,7 +134,7 @@ function checkDatabaseExist(database) {
 
 function createDatabase(database) {
     console.log('Create database ' + database);
-    var cmd = 'CREATE DATABASE ' + database + ';';
+    let cmd = 'CREATE DATABASE ' + database + ';';
     pool_no_db.query(cmd, null, function (error, result) {
         if (error) {
             return finishSetup(error);
@@ -141,7 +151,7 @@ function createTables(database) {
         if (error) {
             return finishSetup(error);
         }        
-        var cmd = result.toString();
+        let cmd = result.toString();
         
         pool.query(cmd, null, function (error, result) {
             if (error) {
